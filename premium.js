@@ -125,17 +125,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 video.play().catch(() => {});
             } else {
-                video.pause();
+                if (!video.paused) video.pause();
             }
         });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.15 });
 
     document.querySelectorAll('video').forEach(v => videoObserver.observe(v));
 
-    // Gesture-based fallback for strict iOS autoplay policies
+    // iOS requires at least one .play() call inside a gesture handler to
+    // "bless" the page media session. After that, IntersectionObserver-triggered
+    // .play() calls will succeed for ALL subsequent muted+playsinline videos.
+    // We call .play() on all in-viewport videos (even if already playing — that's
+    // intentional: calling .play() on the already-playing hero video is the
+    // gesture that unlocks the iOS media session for the rest of the page).
     function unlockVisibleVideos() {
         document.querySelectorAll('video').forEach(v => {
-            if (!v.paused) return; // already playing, skip
             const rect = v.getBoundingClientRect();
             const inView = rect.top < window.innerHeight && rect.bottom > 0;
             if (inView) v.play().catch(() => {});
@@ -143,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.addEventListener('touchstart', unlockVisibleVideos, { once: true });
     document.addEventListener('click',      unlockVisibleVideos, { once: true });
-
 
 
     // ─── Parallax hero video on scroll ───────
