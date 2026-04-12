@@ -31,8 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.getElementById('navToggle');
     const navLinks  = document.getElementById('navLinks');
 
+    function closeMenu() {
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        navToggle.querySelectorAll('span').forEach(s => {
+            s.style.transform = ''; s.style.opacity = '';
+        });
+    }
+
     if (navToggle && navLinks) {
-        navToggle.addEventListener('click', () => {
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             const isOpen = navLinks.classList.toggle('open');
             navToggle.setAttribute('aria-expanded', isOpen);
             document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -49,13 +59,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Close on nav link click
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('open');
-                document.body.style.overflow = '';
-                navToggle.querySelectorAll('span').forEach(s => {
-                    s.style.transform = ''; s.style.opacity = '';
-                });
-            });
+            link.addEventListener('click', closeMenu);
+        });
+
+        // ✅ Stop propagation on li items so clicks don't reach overlay
+        navLinks.querySelectorAll('li').forEach(li => {
+            li.addEventListener('click', (e) => e.stopPropagation());
+        });
+
+        // ✅ Close menu when clicking on the dark overlay (outside the li items)
+        navLinks.addEventListener('click', () => {
+            closeMenu();
+        });
+
+        // ✅ Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                closeMenu();
+            }
         });
     }
 
@@ -91,14 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─── Video: play on viewport, pause off ──
-    const unblockAll = () => {
-        document.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
-        document.removeEventListener('touchstart', unblockAll);
-        document.removeEventListener('click', unblockAll);
-    };
-    document.addEventListener('touchstart', unblockAll, { once: true });
-    document.addEventListener('click', unblockAll, { once: true });
-
+    // ✅ FIX: Removed mass-play unblockAll on first touch — caused all videos to
+    // trigger simultaneously on mobile, creating an unwanted "popup" effect.
+    // Videos are now controlled exclusively by IntersectionObserver below.
     const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target;

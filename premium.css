@@ -1287,6 +1287,16 @@ h1, h2, h3, .brand-font { font-family: var(--font-display); }
         justify-content: center;
         gap: 32px;
         z-index: 999;
+        /* ✅ FIX: clicking dark overlay area closes menu */
+        cursor: pointer;
+    }
+    .nav-links.open li {
+        cursor: default;
+        pointer-events: auto;
+    }
+    .nav-links.open li a,
+    .nav-links.open li .nav-cta {
+        cursor: pointer;
     }
     .nav-link, .nav-cta { font-size: 1.2rem; }
     .nav-toggle { display: flex; }
