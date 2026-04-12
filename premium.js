@@ -112,21 +112,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─── Video: play on viewport, pause off ──
-    // ✅ FIX: Removed mass-play unblockAll on first touch — caused all videos to
-    // trigger simultaneously on mobile, creating an unwanted "popup" effect.
-    // Videos are now controlled exclusively by IntersectionObserver below.
+    // iOS Safari blocks video.play() until a user gesture occurs.
+    // Fix: track which videos are in-view. On first touch/click, play only
+    // those visible videos (not ALL videos — that caused the "popup" effect).
+    // After unlock, IntersectionObserver handles play/pause on scroll normally.
+    let videoUnlocked = false;
+    const videosInView = new Set();
+
     const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target;
             if (entry.isIntersecting) {
-                video.play().catch(() => {});
+                videosInView.add(video);
+                if (videoUnlocked) {
+                    video.play().catch(() => {});
+                }
             } else {
+                videosInView.delete(video);
                 video.pause();
             }
         });
     }, { threshold: 0.3 });
 
     document.querySelectorAll('video').forEach(v => videoObserver.observe(v));
+
+    // Unlock on first user interaction — only plays videos currently visible
+    const unlockVideos = () => {
+        if (videoUnlocked) return;
+        videoUnlocked = true;
+        videosInView.forEach(v => v.play().catch(() => {}));
+    };
+    document.addEventListener('touchstart', unlockVideos, { once: true });
+    document.addEventListener('click', unlockVideos, { once: true });
 
     // ─── Parallax hero video on scroll ───────
     const heroVideo = document.querySelector('.hero-video');
