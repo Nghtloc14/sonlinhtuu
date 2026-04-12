@@ -112,38 +112,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─── Video: play on viewport, pause off ──
-    // iOS Safari blocks video.play() until a user gesture occurs.
-    // Fix: track which videos are in-view. On first touch/click, play only
-    // those visible videos (not ALL videos — that caused the "popup" effect).
-    // After unlock, IntersectionObserver handles play/pause on scroll normally.
-    let videoUnlocked = false;
-    const videosInView = new Set();
+    // IntersectionObserver handles play/pause as user scrolls.
+    // iOS Safari allows .play() on muted+playsinline without user gesture (iOS 10+),
+    // but IntersectionObserver callbacks run async so may still fail on some devices.
+    // Fallback: on first touch/click, manually check which videos are in viewport
+    // via getBoundingClientRect() and play only those — avoids the "popup" bug
+    // that occurred when ALL videos were triggered simultaneously.
 
     const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target;
             if (entry.isIntersecting) {
-                videosInView.add(video);
-                if (videoUnlocked) {
-                    video.play().catch(() => {});
-                }
+                video.play().catch(() => {});
             } else {
-                videosInView.delete(video);
                 video.pause();
             }
         });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.25 });
 
     document.querySelectorAll('video').forEach(v => videoObserver.observe(v));
 
-    // Unlock on first user interaction — only plays videos currently visible
-    const unlockVideos = () => {
-        if (videoUnlocked) return;
-        videoUnlocked = true;
-        videosInView.forEach(v => v.play().catch(() => {}));
-    };
-    document.addEventListener('touchstart', unlockVideos, { once: true });
-    document.addEventListener('click', unlockVideos, { once: true });
+    // Gesture-based fallback for strict iOS autoplay policies
+    function unlockVisibleVideos() {
+        document.querySelectorAll('video').forEach(v => {
+            if (!v.paused) return; // already playing, skip
+            const rect = v.getBoundingClientRect();
+            const inView = rect.top < window.innerHeight && rect.bottom > 0;
+            if (inView) v.play().catch(() => {});
+        });
+    }
+    document.addEventListener('touchstart', unlockVisibleVideos, { once: true });
+    document.addEventListener('click',      unlockVisibleVideos, { once: true });
+
+
 
     // ─── Parallax hero video on scroll ───────
     const heroVideo = document.querySelector('.hero-video');
