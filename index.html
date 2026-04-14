@@ -1,441 +1,243 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơn Linh Tửu | Đặc Sản Di Linh – OCOP 3 Sao 2023</title>
-    <meta name="description" content="Sơn Linh Tửu – Rượu sâm truyền thống ngâm chum sành, đạt chuẩn OCOP 3 sao, Di Linh, Lâm Đồng.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <title>Sơn Linh Tửu - Đặc Sản Di Linh, Lâm Đồng | OCOP 3 Sao</title>
+    <meta name="description"
+        content="Sơn Linh Tửu - Sản phẩm rượu truyền thống đạt chuẩn OCOP 3 sao từ Di Linh, Lâm Đồng. Rượu nếp cổ truyền, Rượu Sâm cao cấp ngâm chum sành.">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="premium.css">
 </head>
-<body>
 
-    <!-- Progress bar -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+<body class="locked">
 
-    <!-- ===================== NAVIGATION ===================== -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-inner">
-            <a href="#hero" class="nav-logo">
-                <img src="assets/img/logo.png" alt="Sơn Linh Tửu" class="nav-logo-img">
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#about" class="nav-link">Về chúng tôi</a></li>
-                <li><a href="#products" class="nav-link">Sản phẩm</a></li>
-                <li><a href="#process" class="nav-link">Quy trình</a></li>
-                <li><a href="#contact" class="nav-link">Liên hệ</a></li>
-                <li><a href="#contact" class="nav-cta">Đặt hàng</a></li>
-            </ul>
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
+    <!-- Lock Screen Overlay -->
+    <div id="lock-screen" class="lock-screen">
+        <div class="liquid-bg">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
         </div>
-    </nav>
-
-    <!-- ===================== HERO ===================== -->
-    <section class="hero" id="hero">
-        <video class="hero-video" autoplay muted loop playsinline>
-            <source src="assets/video/7713994616726.mp4" type="video/mp4">
-        </video>
-        <div class="hero-vignette"></div>
-        <div class="hero-grain"></div>
-
-        <div class="hero-content">
-            <div class="hero-eyebrow">
-                <span class="eyebrow-line"></span>
-                <span>OCOP ★★★ · Di Linh, Lâm Đồng</span>
-                <span class="eyebrow-line"></span>
+        <div class="lock-card">
+            <div class="lock-icon">
+                <i class="fas fa-lock"></i>
             </div>
-
-            <h1 class="hero-title">
-                <span class="title-sub">Tinh hoa rượu Việt</span>
-                <span class="title-main">Sơn Linh Tửu</span>
-            </h1>
-
-            <p class="hero-desc">
-                Ngâm ủ chum sành · 1.5 năm kết tinh · Chứng nhận OCOP 3 sao
-            </p>
-
-            <div class="hero-actions">
-                <a href="#products" class="btn-primary">Khám phá sản phẩm</a>
-                <a href="#process" class="btn-ghost">Xem quy trình</a>
+            <h2>Nội dung được bảo vệ</h2>
+            <p>Vui lòng nhập mật khẩu để truy cập website</p>
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Mật khẩu" autofocus>
+                <button id="unlock-btn">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-        </div>
-
-        <div class="hero-scroll-hint">
-            <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
-            <span>Cuộn xuống</span>
-        </div>
-    </section>
-
-    <!-- ===================== STATS BAR ===================== -->
-    <div class="stats-bar">
-        <div class="stats-inner">
-            <div class="stat-item">
-                <span class="stat-num">8</span>
-                <span class="stat-label">Bước sản xuất</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <span class="stat-num">1.5<small>năm</small></span>
-                <span class="stat-label">Thời gian ngâm ủ</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <span class="stat-num">OCOP</span>
-                <span class="stat-label">3 Sao cấp huyện 2023</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <span class="stat-num">100%</span>
-                <span class="stat-label">Nguyên liệu sạch vùng cao</span>
-            </div>
+            <p id="error-msg" class="error-msg">Mật khẩu không chính xác</p>
         </div>
     </div>
 
-    <!-- ===================== ABOUT ===================== -->
-    <section class="about-section" id="about">
-        <div class="about-grid">
-            <!-- Left: OCOP cert image + badge -->
-            <div class="about-visual reveal-left">
-                <div class="about-img-main">
-                    <img src="assets/img/z7713994652133_e7ecc79d0c15abff95e56b39789665bb.jpg" alt="Chứng nhận OCOP 3 Sao Sơn Linh Tửu">
-                </div>
-                <div class="about-badge-float">
-                    <i class="fas fa-certificate"></i>
-                    <span>OCOP 3★<br>2023</span>
-                </div>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <i class="fas fa-certificate"></i>
+                <span>SẢN PHẨM OCOP 3 SAO CẤP HUYỆN 2023</span>
+            </div>
+            <h1>Sơn Linh Tửu</h1>
+            <p
+                style="font-size: 1.5rem; color: var(--accent); font-weight: 600; margin-top: -10px; margin-bottom: 20px;">
+                Đặc Sản Di Linh, Lâm Đồng</p>
+            <p>Tinh hoa rượu truyền thống Việt - Đạt chuẩn chất lượng OCOP</p>
+            <a href="#products" class="btn">Khám phá sản phẩm</a>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-img reveal">
+            <img src="assets/img/z7713994652133_e7ecc79d0c15abff95e56b39789665bb.jpg" alt="Chứng nhận OCOP 3 Sao"
+                loading="lazy">
+        </div>
+        <div class="about-content reveal">
+            <div class="badge">Về chúng tôi</div>
+            <h2>Nâng Tầm Rượu Việt</h2>
+            <p><strong>Cơ sở:</strong> Hộ kinh doanh Nguyễn Chí Sơn</p>
+            <p><strong>Địa chỉ:</strong> Thôn Lăng Kú, xã Gung Ré, huyện Di Linh, tỉnh Lâm Đồng</p>
+            <p style="margin-top: 20px;">Chúng tôi tự hào mang đến dòng rượu được chưng cất thủ công, kết hợp giữa bí
+                quyết truyền thống và nguồn nguyên liệu sạch vùng cao nguyên, đạt chứng nhận OCOP 3 sao cấp huyện đợt 2
+                năm 2023.</p>
+        </div>
+    </section>
+
+    <!-- Product Section -->
+    <section class="products" id="products">
+        <div class="section-title reveal">
+            <div class="badge">Danh mục</div>
+            <h2>Sản phẩm của chúng tôi</h2>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card reveal">
+                <i class="fas fa-seedling fa-3x" style="color: var(--accent);"></i>
+                <h3>Rượu nếp truyền thống</h3>
+                <ul class="product-list">
+                    <li>Chai 1 lít</li>
+                    <li>Can 30 lít</li>
+                </ul>
             </div>
 
-            <!-- Right: content -->
-            <div class="about-content reveal-right">
-                <p class="section-eyebrow">Câu chuyện thương hiệu</p>
-                <h2 class="section-title-lg">Nâng Tầm<br><em>Rượu Việt</em></h2>
+            <div class="product-card reveal" style="border: 2px solid var(--accent);">
+                <i class="fas fa-leaf fa-3x" style="color: var(--accent);"></i>
+                <h3>Rượu sâm Sơn Linh Tửu</h3>
+                <ul class="product-list">
+                    <li>Chai 500 ml</li>
+                    <li>Chai 1.5 lít</li>
+                    <li>Bình 2.5 lít</li>
+                    <li>Can 5 lít</li>
+                    <li>Can 30 lít</li>
+                </ul>
+            </div>
 
-                <p class="about-text">
-                    Nằm giữa cao nguyên Di Linh lộng gió, <strong>Hộ kinh doanh Nguyễn Chí Sơn</strong> đã gìn giữ bí quyết chưng cất truyền thống qua nhiều thế hệ. Mỗi mẻ rượu là tâm huyết — từ hạt nếp được chọn lọc kỹ lưỡng đến chum sành ủ lâu năm.
-                </p>
-                <p class="about-text">
-                    Năm 2023, Sơn Linh Tửu chính thức nhận chứng nhận <strong>OCOP 3 Sao cấp huyện</strong> — minh chứng cho chất lượng và sự tận tâm không ngừng nghỉ với nghề.
-                </p>
-
-                <!-- Founder card with avatar -->
-                <div class="founder-card">
-                    <img src="assets/img/avatar.jpg" alt="Ông Nguyễn Chí Sơn – Chủ cơ sở Sơn Linh Tửu" class="founder-avatar">
-                    <div class="founder-info">
-                        <strong class="founder-name">Nguyễn Chí Sơn</strong>
-                        <span class="founder-title">Chủ cơ sở sản xuất</span>
-                        <span class="founder-addr"><i class="fas fa-map-marker-alt"></i> Thôn Lăng Kú, xã Gung Ré, Di Linh, Lâm Đồng</span>
-                    </div>
-                </div>
-
-                <a href="#process" class="btn-outline">Xem quy trình sản xuất →</a>
+            <div class="product-card reveal">
+                <i class="fas fa-wine-bottle fa-3x" style="color: var(--accent);"></i>
+                <h3>Các dòng rượu khác</h3>
+                <ul class="product-list">
+                    <li>Rượu dâu</li>
+                    <li>Rượu hồng</li>
+                    <li>Rượu đòng đòng</li>
+                </ul>
             </div>
         </div>
     </section>
 
-    <!-- ===================== PRODUCTS ===================== -->
-    <section class="products-section" id="products">
-        <div class="section-header reveal-up">
-            <p class="section-eyebrow">Danh mục sản phẩm</p>
-            <h2 class="section-title-lg">Dòng sản phẩm<br><em>Sơn Linh Tửu</em></h2>
+    <!-- Production Process -->
+    <section class="process" id="process">
+        <div class="section-title reveal">
+            <div class="badge" style="border-color: var(--bg-cream); color: var(--bg-cream);">Chất lượng</div>
+            <h2>Quy trình sản xuất</h2>
         </div>
 
-        <div class="products-grid">
-
-            <!-- Card 1: Rượu Nếp -->
-            <div class="product-card reveal-up" style="animation-delay: 0.1s">
-                <div class="product-card-inner">
-                    <div class="product-icon-wrap">
-                        <i class="fas fa-seedling"></i>
-                    </div>
-                    <div class="product-tag">Cổ truyền</div>
-                    <h3>Rượu Nếp Truyền Thống</h3>
-                    <p>Chưng cất từ nếp mới vùng cao, bếp củi truyền thống, giữ trọn hương thơm đặc trưng của cao nguyên Di Linh.</p>
-                    <ul class="product-variants">
-                        <li>
-                            <i class="fas fa-wine-bottle"></i>
-                            <span>Chai 1 lít</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-box"></i>
-                            <span>Can 30 lít</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Card 2: Rượu Sâm (Featured) -->
-            <div class="product-card product-card--featured reveal-up" style="animation-delay: 0.2s">
-                <div class="product-card-inner">
-                    <div class="product-featured-badge">★ Cao cấp</div>
-                    <div class="product-icon-wrap">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3>Rượu Sâm<br>Sơn Linh Tửu</h3>
-                    <p>Sâm ngâm chum sành từ 1–1.5 năm với rượu nền thượng hạng. Tinh chất được chiết xuất hoàn toàn, hương vị cân bằng và dịu nhẹ.</p>
-                    <ul class="product-variants">
-                        <li><i class="fas fa-wine-bottle"></i><span>Chai 500 ml</span></li>
-                        <li><i class="fas fa-wine-bottle"></i><span>Chai 1.5 lít</span></li>
-                        <li><i class="fas fa-wine-glass"></i><span>Bình 2.5 lít</span></li>
-                        <li><i class="fas fa-box"></i><span>Can 5 lít</span></li>
-                        <li><i class="fas fa-box"></i><span>Can 30 lít</span></li>
-                    </ul>
-                    <a href="#contact" class="btn-product">Liên hệ đặt hàng</a>
-                </div>
-            </div>
-
-            <!-- Card 3: Các dòng khác -->
-            <div class="product-card reveal-up" style="animation-delay: 0.3s">
-                <div class="product-card-inner">
-                    <div class="product-icon-wrap">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <div class="product-tag">Đặc sản</div>
-                    <h3>Các Dòng Rượu Trái Cây</h3>
-                    <p>Từ trái cây tươi vùng cao nguyên lành, ủ theo phương pháp truyền thống — hương thơm tự nhiên, nguyên vẹn.</p>
-                    <ul class="product-variants">
-                        <li><i class="fas fa-circle-dot"></i><span>Rượu Dâu</span></li>
-                        <li><i class="fas fa-circle-dot"></i><span>Rượu Hồng</span></li>
-                        <li><i class="fas fa-circle-dot"></i><span>Rượu Đòng Đòng</span></li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Product showcase photo -->
-        <div class="product-showcase reveal-up">
-            <img src="assets/img/508708496_4836861873205980_2645978137781582795_n.jpg" alt="Sơn Linh Tửu – Rượu sâm chai và hộp quà">
-            <div class="showcase-overlay">
-                <p class="showcase-text">Chai 500ml × 6 · Hàm lượng Etanol: 29% vol</p>
-                <a href="#contact" class="btn-primary">Đặt hàng ngay</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== PROCESS ===================== -->
-    <section class="process-section" id="process">
-        <div class="section-header reveal-up">
-            <p class="section-eyebrow" style="color: var(--gold)">Hành trình tạo tác</p>
-            <h2 class="section-title-lg" style="color: var(--cream)">Quy Trình<br><em>Sản Xuất</em></h2>
-            <p style="color: rgba(255,255,255,0.55); max-width: 500px; margin: 0 auto;">8 bước thủ công nghiêm ngặt — mỗi mẻ rượu là tâm huyết của người thợ</p>
-        </div>
-
-        <div class="process-timeline">
-
-            <div class="process-step reveal-left">
+        <div class="timeline">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <video autoplay muted loop playsinline preload="none">
+                    <video muted loop playsinline preload="metadata">
                         <source src="assets/video/7713994616677.mp4" type="video/mp4">
                     </video>
-                    <div class="step-num-overlay">01</div>
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 01</span>
-                    <h3>Chọn Nếp</h3>
-                    <p>Nếp mới, hạt đều, chắc và thơm từ vùng cao được lựa chọn kỹ lưỡng để đảm bảo chất lượng rượu đầu ra luôn tốt nhất.</p>
+                <div class="step-info">
+                    <span class="step-number">01</span>
+                    <h3>Chọn nếp</h3>
+                    <p>Nếp được lựa chọn kỹ, sử dụng nếp mới, hạt đều, chắc và thơm để đảm bảo chất lượng rượu đầu ra luôn tốt nhất.</p>
                 </div>
             </div>
 
-            <div class="process-step process-step--reverse reveal-right">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <video autoplay muted loop playsinline preload="none">
+                    <video muted loop playsinline preload="metadata">
                         <source src="assets/video/7713994616723.mp4" type="video/mp4">
                     </video>
-                    <div class="step-num-overlay">02</div>
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 02</span>
-                    <h3>Ngâm & Nấu</h3>
+                <div class="step-info">
+                    <span class="step-number">02</span>
+                    <h3>Ngâm và nấu</h3>
                     <p>Nếp được vo sạch, ngâm khoảng 6 tiếng, sau đó đưa vào khay máy để nấu cơm chín đều từng hạt.</p>
                 </div>
             </div>
 
-            <div class="process-step reveal-left">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <img src="assets/img/ginseng_wine_jar_1775890305373.png" alt="Ủ men">
-                    <div class="step-num-overlay">03</div>
+                    <img src="assets/img/ginseng_wine_jar_1775890305373.png" alt="Ủ men" loading="lazy">
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 03</span>
-                    <h3>Ủ Men</h3>
-                    <p>Cơm chín trộn men theo tỷ lệ chuẩn, ủ trong thùng từ 10–14 ngày cho đến khi đạt độ chín hoàn hảo.</p>
+                <div class="step-info">
+                    <span class="step-number">03</span>
+                    <h3>Ủ men</h3>
+                    <p>Cơm chín được trộn men theo tỷ lệ chuẩn và ủ trong thùng từ 10–14 ngày đến khi chín đều.</p>
                 </div>
             </div>
 
-            <div class="process-step process-step--reverse reveal-right">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <video autoplay muted loop playsinline preload="none">
+                    <video muted loop playsinline preload="metadata">
                         <source src="assets/video/7713994616725.mp4" type="video/mp4">
                     </video>
-                    <div class="step-num-overlay">04</div>
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 04</span>
-                    <h3>Chưng Cất</h3>
-                    <p>Chưng cất thủ công với bếp củi truyền thống — lửa điều tiết tay, giữ nguyên vẹn hương vị đặc trưng lâu đời.</p>
-                </div>
-            </div>
-
-            <div class="process-step reveal-left">
-                <div class="step-media">
-                    <img src="assets/img/aging_base_wine_step_5_1775903224500.png" alt="Ủ rượu nền">
-                    <div class="step-num-overlay">05</div>
-                </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 05</span>
-                    <h3>Ủ Rượu Nền</h3>
-                    <p>Sau khi nấu, rượu được để ổn định trong 6 tháng để hương vị cân bằng và êm dịu trước khi bước vào giai đoạn tiếp theo.</p>
+                <div class="step-info">
+                    <span class="step-number">04</span>
+                    <h3>Chưng cất</h3>
+                    <p>Cơm rượu được chưng cất bằng nồi nấu thủ công, sử dụng bếp củi truyền thống để giữ trọn vẹn hương vị đặc trưng.</p>
                 </div>
             </div>
 
-            <div class="process-step process-step--reverse reveal-right">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <img src="assets/img/processing_ginseng_step_6_1775903241040.png" alt="Xử lý sâm">
-                    <div class="step-num-overlay">06</div>
+                    <img src="assets/img/aging_base_wine_step_5_1775903224500.png" alt="Ủ rượu nền" loading="lazy">
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 06</span>
-                    <h3>Xử Lý Sâm</h3>
-                    <p>Sâm thu hoạch được rửa sạch, phơi 3–4 nắng dậy mùi thơm, rồi tráng lại bằng chính rượu nền thượng hạng.</p>
+                <div class="step-info">
+                    <span class="step-number">05</span>
+                    <h3>Ủ rượu nền</h3>
+                    <p>Rượu sau khi nấu được để ổn định trong 6 tháng trước khi lọc, giúp hương vị cân bằng và êm dịu hơn.</p>
                 </div>
             </div>
 
-            <div class="process-step reveal-left">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <video autoplay muted loop playsinline preload="none">
+                    <img src="assets/img/processing_ginseng_step_6_1775903241040.png" alt="Xử lý sâm" loading="lazy">
+                </div>
+                <div class="step-info">
+                    <span class="step-number">06</span>
+                    <h3>Xử lý sâm</h3>
+                    <p>Sâm sau thu hoạch được rửa sạch, phơi 3–4 nắng giúp dậy mùi thơm, sau đó được rửa lại bằng chính loại rượu nền thượng hạng.</p>
+                </div>
+            </div>
+
+            <div class="step-card reveal">
+                <div class="step-media">
+                    <video muted loop playsinline preload="metadata">
                         <source src="assets/video/7713994616726.mp4" type="video/mp4">
                     </video>
-                    <div class="step-num-overlay">07</div>
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 07</span>
-                    <h3>Ngâm Chum Sành</h3>
-                    <p>Sâm và rượu nền được hòa trong chum sành từ <strong>1 đến 1.5 năm</strong> — để tinh chất được chiết xuất hoàn toàn, hương vị chín muồi tự nhiên.</p>
+                <div class="step-info">
+                    <span class="step-number">07</span>
+                    <h3>Ngâm chum sành</h3>
+                    <p>Sâm được ngâm trong chum sành cùng rượu nền thượng hạng từ 1 đến 1.5 năm trước khi xuất xưởng.</p>
                 </div>
             </div>
 
-            <div class="process-step process-step--reverse reveal-right">
+            <div class="step-card reveal">
                 <div class="step-media">
-                    <video autoplay muted loop playsinline preload="none">
+                    <video muted loop playsinline preload="metadata">
                         <source src="assets/video/7713994616722.mp4" type="video/mp4">
                     </video>
-                    <div class="step-num-overlay">08</div>
                 </div>
-                <div class="step-content">
-                    <span class="step-num-text">Bước 08</span>
-                    <h3>Đóng Chai</h3>
-                    <p>Sau khi đạt đủ tiêu chuẩn hương vị và nồng độ, sản phẩm được đóng chai theo quy trình vệ sinh nghiêm ngặt, sẵn sàng đến tay quý khách.</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ===================== TRUST ===================== -->
-    <section class="trust-section reveal-up">
-        <div class="trust-inner">
-            <div class="trust-text">
-                <p class="section-eyebrow">Chất lượng được xác nhận</p>
-                <h2 class="section-title-lg">Sản phẩm đạt<br><em>tiêu chuẩn OCOP</em></h2>
-                <p>Chứng nhận OCOP 3 Sao cấp huyện Di Linh năm 2023 là minh chứng rõ ràng nhất cho chất lượng và tâm huyết của cơ sở Nguyễn Chí Sơn.</p>
-                <ul class="trust-list">
-                    <li><i class="fas fa-check-circle"></i> Nguyên liệu 100% tự nhiên, không phụ gia</li>
-                    <li><i class="fas fa-check-circle"></i> Quy trình chưng cất thủ công truyền thống</li>
-                    <li><i class="fas fa-check-circle"></i> Ủ chum sành tối thiểu 1 năm</li>
-                    <li><i class="fas fa-check-circle"></i> Kiểm định chất lượng trước khi xuất xưởng</li>
-                </ul>
-            </div>
-            <div class="trust-cert">
-                <img src="assets/img/z7713994652133_e7ecc79d0c15abff95e56b39789665bb.jpg" alt="Chứng nhận OCOP 3 Sao">
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================== CONTACT / ORDER ===================== -->
-    <section class="contact-section" id="contact">
-        <div class="contact-bg-text">ĐẶT HÀNG</div>
-        <div class="contact-inner">
-            <div class="contact-content reveal-up">
-                <p class="section-eyebrow" style="color: var(--gold)">Liên hệ & Đặt hàng</p>
-                <h2 class="section-title-lg" style="color: var(--cream)">Để lại thông tin,<br><em>chúng tôi liên hệ lại</em></h2>
-                <p style="color: rgba(255,255,255,0.6); margin-bottom: 40px;">Giao hàng toàn quốc · Bảo đảm chất lượng chính hãng</p>
-
-                <div class="contact-channels">
-                    <a href="tel:0968000000" class="channel-btn channel-phone">
-                        <i class="fas fa-phone"></i>
-                        <div>
-                            <strong>Gọi điện</strong>
-                            <span>0968 000 000</span>
-                        </div>
-                    </a>
-                    <a href="https://zalo.me/0968000000" class="channel-btn channel-zalo">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.002 1C6.479 1 2 5.478 2 12.001c0 1.842.462 3.576 1.27 5.1L2.02 22.06c-.068.345.245.654.59.578l5.03-1.215A10.944 10.944 0 0012.002 23c5.523 0 10-4.477 10-10.001C22.002 6.477 17.525 1 12.002 1z"/></svg>
-                        <div>
-                            <strong>Zalo</strong>
-                            <span>Nhắn tin ngay</span>
-                        </div>
-                    </a>
-                    <div class="channel-btn channel-addr" style="cursor: default;">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <strong>Địa chỉ</strong>
-                            <span>Thôn Lăng Kú, Gung Ré, Di Linh, Lâm Đồng</span>
-                        </div>
-                    </div>
+                <div class="step-info">
+                    <span class="step-number">08</span>
+                    <h3>Đóng chai</h3>
+                    <p>Sau khi đạt độ chuẩn về hương vị và nồng độ, sản phẩm được đóng chai với quy trình hợp vệ sinh.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===================== FOOTER ===================== -->
-    <footer class="footer">
-        <div class="footer-top">
-            <div class="footer-brand">
-                <p class="footer-logo">Sơn Linh Tửu</p>
-                <p class="footer-tagline">Hương vị truyền thống · Chất lượng chuẩn OCOP</p>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h2 class="brand-font">Sơn Linh Tửu</h2>
+            <p>Hương vị truyền thống - Chất lượng chuẩn OCOP</p>
+
+            <div class="contact-info">
+                <div class="info-item">
+                    <i class="fas fa-user"></i> Nguyễn Chí Sơn
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i> Gung Ré, Di Linh, Lâm Đồng
+                </div>
             </div>
 
-            <div class="footer-nav">
-                <h4>Trang</h4>
-                <ul>
-                    <li><a href="#about">Về chúng tôi</a></li>
-                    <li><a href="#products">Sản phẩm</a></li>
-                    <li><a href="#process">Quy trình</a></li>
-                    <li><a href="#contact">Liên hệ</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-contact">
-                <h4>Liên hệ</h4>
-                <ul>
-                    <li><i class="fas fa-user"></i> Nguyễn Chí Sơn</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Thôn Lăng Kú, xã Gung Ré,<br>huyện Di Linh, tỉnh Lâm Đồng</li>
-                    <li><i class="fas fa-phone"></i> 0968 000 000</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>© 2024 Sơn Linh Tửu · Hộ kinh doanh Nguyễn Chí Sơn · Toàn bộ thông tin quy trình đã được xác thực.</p>
-            <p style="opacity: 0.4; font-size: 0.75rem; margin-top: 8px;">Uống rượu có hại cho sức khỏe. Không bán rượu cho người dưới 18 tuổi.</p>
+            <p style="margin-top: 50px; font-size: 0.9rem; opacity: 0.7;">&copy; 2024 Sơn Linh Tửu. Toàn bộ thông tin quy trình đã được xác thực.</p>
         </div>
     </footer>
 
-    <!-- Floating CTAs -->
-    <div class="float-ctas">
-        <a href="tel:0968000000" class="float-btn float-phone" aria-label="Gọi điện">
-            <i class="fas fa-phone"></i>
-        </a>
-        <a href="https://zalo.me/0968000000" class="float-btn float-zalo" aria-label="Zalo">
-            <i class="fas fa-comment"></i>
-        </a>
-    </div>
-
-    <script src="premium.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
