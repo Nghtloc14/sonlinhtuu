@@ -1,52 +1,60 @@
-// --- Logic Màn Hình Khóa ---
-document.addEventListener('DOMContentLoaded', () => {
-    const lockScreen = document.getElementById('lock-screen');
-    const passwordInput = document.getElementById('password-input');
-    const unlockBtn = document.getElementById('unlock-btn');
-    const errorMsg = document.getElementById('error-msg');
-    const lockCard = document.querySelector('.lock-card');
-    
-    const CORRECT_HASH = "b484fedb7461736965a52e45dc5956e1d10a31ac86a85b9ae9d7155f0a965b4e"; // nguyenhotanloc
+/* --- Lock Screen (macOS Liquid Blur) --- */
+.lock-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
+    overflow: hidden;
+}
 
-    async function sha256(message) {
-        const msgBuffer = new TextEncoder().encode(message);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+.lock-screen.unlocked {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
 
-    const unlock = () => {
-        document.body.classList.remove('locked');
-        if(lockScreen) lockScreen.classList.add('unlocked');
-        sessionStorage.setItem('unlocked', 'true');
-    };
+.liquid-bg {
+    position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; filter: blur(80px);
+}
 
-    if (sessionStorage.getItem('unlocked') === 'true') unlock();
+.blob { position: absolute; width: 50vw; height: 50vw; border-radius: 50%; opacity: 0.6; }
+.blob-1 { background: #4A0E0E; top: -10%; left: -10%; animation: move1 20s infinite alternate; }
+.blob-2 { background: #D4AF37; bottom: -10%; right: -10%; animation: move2 25s infinite alternate; }
+.blob-3 { background: #722F37; top: 40%; left: 30%; animation: move1 15s infinite alternate; }
 
-    const handleUnlockAttempt = async () => {
-        const hashedInput = await sha256(passwordInput.value);
-        if (hashedInput === CORRECT_HASH) {
-            unlock();
-        } else {
-            lockCard.classList.add('shake');
-            errorMsg.classList.add('show');
-            passwordInput.value = '';
-            setTimeout(() => lockCard.classList.remove('shake'), 400);
-        }
-    };
+@keyframes move1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(20%, 30%) scale(1.2); } }
+@keyframes move2 { 0% { transform: translate(0, 0) scale(1.1); } 100% { transform: translate(-30%, -20%) scale(0.8); } }
 
-    if(unlockBtn) unlockBtn.addEventListener('click', handleUnlockAttempt);
-    if(passwordInput) passwordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleUnlockAttempt();
-    });
+.lock-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 50px; border-radius: 30px; text-align: center; width: 90%; max-width: 450px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.6s ease-out;
+}
 
-    // Bảo mật: Chặn chuột phải và phím tắt
-    document.addEventListener('contextmenu', e => { if(document.body.classList.contains('locked')) e.preventDefault(); });
-    document.addEventListener('keydown', e => {
-        if (!document.body.classList.contains('locked')) return;
-        if (e.key === 'F12' || 
-            ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-            ((e.ctrlKey || e.metaKey) && (e.key === 'U' || e.key === 'S'))
-        ) e.preventDefault();
-    });
-});
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.lock-icon { width: 80px; height: 80px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 2rem; color: white; border: 1px solid rgba(255, 255, 255, 0.2); }
+.lock-card h2 { color: white; font-size: 2rem; margin-bottom: 15px; font-family: 'Playfair Display', serif; }
+.lock-card p { color: rgba(255, 255, 255, 0.8); font-size: 1.1rem; margin-bottom: 30px; }
+
+.input-group { position: relative; display: flex; align-items: center; }
+#password-input { width: 100%; padding: 18px 25px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; color: white; font-size: 1.1rem; outline: none; transition: all 0.3s; }
+#password-input:focus { background: rgba(255, 255, 255, 0.2); border-color: #D4AF37; }
+#unlock-btn { position: absolute; right: 10px; width: 45px; height: 45px; background: #D4AF37; border: none; border-radius: 10px; color: #4A0E0E; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+.error-msg { color: #ff4d4d !important; font-size: 0.9rem !important; margin-top: 15px !important; opacity: 0; transition: opacity 0.3s; }
+.error-msg.show { opacity: 1; }
+.lock-card.shake { animation: shake 0.4s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+body.locked { overflow: hidden; user-select: none; -webkit-user-select: none; }
