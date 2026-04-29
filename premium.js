@@ -1,46 +1,86 @@
-<!DOCTYPE html>
-<html lang="vi">
+// ===== CONFIGURATION =====
+const CONFIG = {
+    password: 'sonlinhtuu2024',      // 🔐 Mật khẩu
+    lockScreenId: 'lock-screen',
+    passwordInputId: 'password-input',
+    unlockBtnId: 'unlock-btn',
+    errorMsgId: 'error-msg',
+    lockCardSelector: '.lock-card',
+    bodyLockedClass: 'locked'
+};
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơn Linh Tửu - Đặc Sản Di Linh, Lâm Đồng | OCOP 3 Sao</title>
-    <meta name="description"
-        content="Sơn Linh Tửu - Sản phẩm rượu truyền thống đạt chuẩn OCOP 3 sao từ Di Linh, Lâm Đồng. Rượu nếp cổ truyền, Rượu Sâm cao cấp ngâm chum sành.">
-    <!-- Đã đổi sang premium.css -->
-    <link rel="stylesheet" href="premium.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+// ===== DOM ELEMENTS =====
+const lockScreen = document.getElementById(CONFIG.lockScreenId);
+const passwordInput = document.getElementById(CONFIG.passwordInputId);
+const unlockBtn = document.getElementById(CONFIG.unlockBtnId);
+const errorMsg = document.getElementById(CONFIG.errorMsgId);
+const lockCard = document.querySelector(CONFIG.lockCardSelector);
+const body = document.body;
 
-<body class="locked">
+// ===== UNLOCK FUNCTION =====
+function unlockScreen() {
+    lockScreen.classList.add('unlocked');
+    
+    setTimeout(() => {
+        body.classList.remove(CONFIG.bodyLockedClass);
+        lockScreen.style.display = 'none';
+    }, 800);
+    
+    localStorage.setItem('sonlinhtuu_unlocked', 'true');
+    console.log('✅ Website unlocked!');
+}
 
-    <!-- Lock Screen Overlay (Màn hình khóa) -->
-    <div id="lock-screen" class="lock-screen">
-        <div class="liquid-bg">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-        </div>
-        <div class="lock-card">
-            <div class="lock-icon">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h2>Nội dung được bảo vệ</h2>
-            <p>Vui lòng nhập mật khẩu để truy cập website</p>
-            <div class="input-group">
-                <input type="password" id="password-input" placeholder="Mật khẩu" autofocus>
-                <button id="unlock-btn">
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-            <p id="error-msg" class="error-msg">Mật khẩu không chính xác</p>
-        </div>
-    </div>
+// ===== VERIFY PASSWORD =====
+function verifyPassword() {
+    const inputPassword = passwordInput.value.trim();
+    
+    if (inputPassword === CONFIG.password) {
+        unlockScreen();
+    } else {
+        errorMsg.classList.add('show');
+        lockCard.classList.add('shake');
+        
+        setTimeout(() => {
+            lockCard.classList.remove('shake');
+        }, 400);
+        
+        setTimeout(() => {
+            errorMsg.classList.remove('show');
+        }, 3000);
+        
+        passwordInput.value = '';
+        passwordInput.focus();
+        console.log('❌ Wrong password');
+    }
+}
 
-    <!-- Toàn bộ nội dung website của bạn nằm ở đây (Giữ nguyên như cũ) -->
-    <!-- ... (Nội dung Hero, About, Products...) -->
+// ===== CLEAR ANIMATIONS =====
+function clearAnimation() {
+    lockCard.classList.remove('shake');
+}
 
-    <!-- Đã đổi sang premium.js -->
-    <script src="premium.js"></script>
-</body>
-</html>
+function hideError() {
+    errorMsg.classList.remove('show');
+}
+
+// ===== CHECK IF ALREADY UNLOCKED =====
+function initLockScreen() {
+    if (localStorage.getItem('sonlinhtuu_unlocked') === 'true') {
+        lockScreen.classList.add('unlocked');
+        body.classList.remove(CONFIG.bodyLockedClass);
+        lockScreen.style.display = 'none';
+        console.log('🔓 Already unlocked (from localStorage)');
+    }
+}
+
+// ===== EVENT LISTENERS =====
+unlockBtn.addEventListener('click', verifyPassword);
+
+passwordInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        verifyPassword();
+    }
+});
+
+// ===== INITIALIZE =====
+document.addEventListener('DOMContentLoaded', initLockScreen);
