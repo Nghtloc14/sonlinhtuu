@@ -105,11 +105,38 @@
     document.querySelectorAll('main > section[id]').forEach(s => spy.observe(s));
   }
 
+  // ---- Quy trình cuộn dọc: vạch vàng chạy theo vị trí đọc, bước ở giữa màn hình sáng lên, bước khác dịu xuống
+  const stepList = document.getElementById('cac-buoc');
+  if (stepList) {
+    const items = [...stepList.children];
+    items[0].classList.add('is-active'); // có sẵn một bước sáng, không bao giờ dịu cả 4
+    let queued = false;
+    const trace = () => {
+      queued = false;
+      const r = stepList.getBoundingClientRect();
+      const p = (innerHeight * .55 - r.top) / r.height;
+      stepList.style.setProperty('--p', Math.min(1, Math.max(0, p)).toFixed(4));
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(trace); } }, { passive: true });
+    addEventListener('resize', trace);
+    trace();
+    if ('IntersectionObserver' in window) {
+      const focus = new IntersectionObserver(entries => {
+        for (const e of entries) {
+          if (e.isIntersecting) items.forEach(el => el.classList.toggle('is-active', el === e.target));
+        }
+      }, { rootMargin: '-42% 0px -42% 0px' });
+      items.forEach(el => focus.observe(el));
+      // Chỉ làm dịu các bước khác khi phần quy trình đang chiếm giữa màn hình
+      new IntersectionObserver(([e]) => stepList.classList.toggle('is-live', e.isIntersecting), { rootMargin: '-30% 0px -30% 0px' }).observe(stepList);
+    }
+  }
+
   // ---- iOS chỉ áp trạng thái :active (bấm giữ) khi trang có lắng nghe chạm
   document.addEventListener('touchstart', () => {}, { passive: true });
 
   // ---- Hiện dần khi cuộn tới; nhóm (4 bước, 3 ảnh, 2 giấy) hiện lần lượt
-  const groups = ['.head', '.diem-list > .diem', '.about__lead', '.place', '.steps > .step', '.gallery > figure', '.docs > .doc', '.docs__note', '.contact__lead', '.contact__actions', '.foot__in > div'];
+  const groups = ['.head', '.diem-list > .diem', '.about__lead', '.place', '.step__head', '.gallery > figure', '.docs > .doc', '.docs__note', '.contact__lead', '.contact__actions', '.foot__in > div'];
   const revealEls = [];
   groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i) => {
     el.classList.add('rv');

@@ -196,38 +196,36 @@ p { text-wrap: pretty; }
 .diem:active .diem__arch { border-color: var(--vang-sang); box-shadow: 0 0 0 4px var(--rung), 0 0 0 5px rgba(216,180,107,.6), 0 0 34px -6px rgba(216,180,107,.45); }
 .diem:active .diem__icon { transform: scale(.92); }
 
-/* ---------- Quy trình ---------- */
-.steps { list-style: none; margin: 0 auto; padding: 0; max-width: 460px; position: relative; }
-.steps::before { content: ""; position: absolute; left: 17px; top: 18px; bottom: 60px; width: 1px; background: linear-gradient(180deg, var(--vang), rgba(216,180,107,.15)); }
-.step { display: grid; grid-template-columns: 36px 1fr; gap: 16px; }
-.step + .step { margin-top: 38px; }
+/* ---------- Quy trình: cuộn dọc từng bước, vạch vàng chạy theo, bước đang xem sáng lên ---------- */
+.steps { list-style: none; position: relative; max-width: 560px; margin: 0 auto; padding: 0 0 0 34px; }
+.steps::before, .steps::after { content: ""; position: absolute; left: 9px; top: 26px; width: 1px; }
+.steps::before { bottom: 26px; background: rgba(216,180,107,.2); }
+.steps::after {
+  height: calc((100% - 52px) * var(--p, 0));
+  background: linear-gradient(180deg, var(--vang), var(--vang-sang)); box-shadow: 0 0 10px rgba(216,180,107,.55);
+}
+.step { position: relative; }
+.step + .step { margin-top: 64px; }
 .step__n {
-  position: relative; z-index: 1; width: 26px; height: 26px; margin: 5px 0 0 5px;
-  display: grid; place-items: center; transform: rotate(45deg);
-  border: 1px solid var(--vang); background: var(--rung); box-shadow: 0 0 0 4px var(--rung);
+  position: absolute; z-index: 1; left: -33px; top: 18px; width: 19px; height: 19px;
+  transform: rotate(45deg); border: 1px solid var(--vang); background: var(--rung); box-shadow: 0 0 0 6px var(--rung);
 }
-.step__n b { transform: rotate(-45deg); font: 600 12px/1 var(--display); color: var(--vang-sang); }
-.step__t {
-  font: 600 26px/1.15 var(--display); text-transform: uppercase; letter-spacing: .02em;
-  background: var(--gold); -webkit-background-clip: text; background-clip: text; color: transparent;
-  padding: .32em 0 .16em; margin: calc(16px - .32em) 0 calc(4px - .16em);
+.step__head { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 18px; }
+.step__no {
+  flex: none; font: 600 70px/.82 var(--display); letter-spacing: .01em;
+  color: transparent; -webkit-text-stroke: 1px rgba(216,180,107,.65);
 }
-.step__body p { margin: 0; color: var(--chu); }
+.step__of { margin: 0 0 4px; font: 600 11.5px/1.4 var(--text); letter-spacing: .2em; text-transform: uppercase; color: var(--chu-mo); }
+.step__t { margin: 0; font: 600 clamp(32px, 9.4vw, 40px)/1.12 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--kem); }
+.step__desc { margin: 16px 0 0; font-size: 16.5px; line-height: 1.65; color: var(--chu); }
 
-/* Điện thoại, máy tính bảng: lưới ô video, thấy cả 4 bước một lúc, không vuốt ngang */
-@media (max-width: 1023px) {
-  .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 12px; max-width: 560px; margin: 0 auto; padding: 0; }
-  .steps::before { display: none; }
-  .step, .step + .step { display: block; margin: 0; position: relative; }
-  .step__n { position: absolute; z-index: 3; top: 12px; left: 12px; width: 24px; height: 24px; margin: 0; box-shadow: 0 0 0 3px rgba(14,37,25,.75); }
-  .step__n b { font-size: 11px; }
-  .step__body { display: grid; grid-template-rows: 1fr auto auto; }
-  .step__body > .frame { grid-area: 1 / 1 / 3 / 2; }
-  .step__t { grid-area: 2 / 1; position: relative; z-index: 2; align-self: end; margin: 0 5px; padding: .32em 12px 12px; font-size: clamp(19px, 5.6vw, 26px); }
-  .step__body > p { grid-area: 3 / 1; margin: 10px 2px 0; font-size: 14px; line-height: 1.5; color: var(--chu); }
-  .frame__in::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(6,16,11,0) 50%, rgba(6,16,11,.5) 72%, rgba(6,16,11,.92) 100%); }
-  .frame__in::after { inset: 6px; }
-}
+/* Bước đang xem: các bước khác dịu xuống để mắt tập trung */
+.step { transition: opacity .6s ease; }
+.steps.is-live .step:not(.is-active) { opacity: .45; }
+.step__n, .step__no, .step .frame { transition: background-color .45s ease, box-shadow .45s ease, color .45s ease, -webkit-text-stroke-color .45s ease, border-color .45s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
+.step.is-active .step__n { background: var(--vang); box-shadow: 0 0 0 6px var(--rung), 0 0 20px rgba(216,180,107,.75); }
+.step.is-active .step__no { color: rgba(216,180,107,.16); -webkit-text-stroke-color: var(--vang-sang); }
+.step.is-active .frame { border-color: var(--vang-sang); box-shadow: 0 24px 50px -24px rgba(0,0,0,.7), 0 0 44px -14px rgba(216,180,107,.45); }
 
 /* ---------- Về cơ sở ---------- */
 .about__lead { margin: 0 auto 24px; max-width: 36em; font-size: 16.5px; color: var(--chu); text-align: center; }
@@ -374,7 +372,6 @@ p { text-wrap: pretty; }
   .diem__t { font-size: 24px; }
   .diem__body p { max-width: 22em; margin-inline: auto; }
 
-  .steps { max-width: none; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
   .gallery { max-width: 760px; grid-template-columns: 1.3fr 1fr; grid-template-rows: auto auto; }
   .gallery__big { grid-column: 1; grid-row: 1 / span 2; display: flex; flex-direction: column; }
@@ -456,16 +453,26 @@ p { text-wrap: pretty; }
   .diem__t { font-size: 30px; }
   .diem__body p { font-size: 16px; }
 
-  /* Quy trình: 4 cột, đường vàng nối các bước */
-  .step { grid-template-columns: 1fr; gap: 0; }
-  .step + .step { margin-top: 0; }
-  .steps { display: grid; max-width: none; grid-template-columns: repeat(4, 1fr); gap: 32px; }
-  .steps::before { display: block; left: 12.5%; right: 12.5%; top: 18px; bottom: auto; width: auto; height: 1px; background: linear-gradient(90deg, rgba(216,180,107,.2), var(--vang) 20%, var(--vang) 80%, rgba(216,180,107,.2)); }
-  .step { justify-items: center; text-align: center; }
-  .step__n { width: 28px; height: 28px; margin: 4px 0 26px; }
-  .step__body { width: 100%; }
-  .step__t { font-size: 28px; }
-  .step__body p { max-width: 24em; margin-inline: auto; }
+  /* Quy trình: so le video / chữ quanh đường vàng giữa */
+  .steps { max-width: 1060px; padding: 0; }
+  .steps::before, .steps::after { left: 50%; top: 0; }
+  .steps::before { bottom: 0; }
+  .steps::after { height: calc(100% * var(--p, 0)); }
+  .step + .step { margin-top: 96px; }
+  .step__n { left: 50%; top: 50%; width: 22px; height: 22px; translate: -50% -50%; }
+  .step__body {
+    display: grid; grid-template-columns: 1fr 1fr; column-gap: 120px;
+    grid-template-rows: 1fr auto auto 1fr; grid-template-areas: "media ." "media head" "media desc" "media .";
+  }
+  .step:nth-child(even) .step__body { grid-template-areas: ". media" "head media" "desc media" ". media"; }
+  .step__body > .frame { grid-area: media; width: min(100%, 380px); justify-self: end; }
+  .step:nth-child(even) .step__body > .frame { justify-self: start; }
+  .step__head { grid-area: head; margin-bottom: 20px; }
+  .step__desc { grid-area: desc; margin: 0; max-width: 24em; font-size: 18px; }
+  .step:nth-child(even) .step__head { justify-self: end; flex-direction: row-reverse; text-align: right; }
+  .step:nth-child(even) .step__desc { justify-self: end; text-align: right; }
+  .step__no { font-size: 104px; }
+  .step__t { font-size: 48px; }
 
   /* Về cơ sở: chữ trái, ảnh phải */
   .about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; align-items: center; }
@@ -550,9 +557,6 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 .step:active .frame, .gallery figure:active .frame { border-color: var(--vang-sang); }
 .step:active .frame__in::after, .gallery figure:active .frame__in::after { inset: 14px; opacity: 1; }
 
-.step__n { transition: background-color .35s ease, box-shadow .35s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
-.step__n b { transition: color .35s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
-.step__t { transition: filter .35s ease; }
 
 .doc, .place { transition: border-color .35s ease, box-shadow .45s ease; }
 .doc__paper:active { transform: rotate(0) scale(.97); }
@@ -569,9 +573,8 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
   .step:hover .frame, .gallery figure:hover .frame { transform: translateY(-8px); border-color: var(--vang-sang); box-shadow: 0 34px 60px -26px rgba(0,0,0,.85), 0 0 36px -10px rgba(216,180,107,.35); }
   .step:hover .frame__in img, .step:hover .frame__in video, .gallery figure:hover .frame__in img { transform: scale(1.06); }
   .step:hover .frame__in::after, .gallery figure:hover .frame__in::after { inset: 14px; opacity: 1; }
-  .step:hover .step__n { background: var(--vang); box-shadow: 0 0 0 4px var(--rung), 0 0 22px rgba(216,180,107,.55); transform: rotate(225deg); }
-  .step:hover .step__n b { color: #1B1407; transform: rotate(-225deg); }
-  .step:hover .step__t { filter: brightness(1.15) drop-shadow(0 0 12px rgba(216,180,107,.35)); }
+  .step:hover .step__n { background: var(--vang); transform: rotate(225deg); }
+  .step:hover { opacity: 1 !important; }
   .gallery figure:hover figcaption { color: var(--vang-sang); }
 
   .diem:hover .diem__arch { transform: translateY(-8px); border-color: var(--vang-sang); box-shadow: 0 0 0 4px var(--rung), 0 0 0 5px rgba(216,180,107,.6), 0 34px 60px -24px rgba(0,0,0,.9), 0 0 44px -8px rgba(216,180,107,.45); }
