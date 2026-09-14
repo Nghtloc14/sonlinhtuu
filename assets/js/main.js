@@ -105,6 +105,45 @@
     document.querySelectorAll('main > section[id]').forEach(s => spy.observe(s));
   }
 
+  // ---- Quy trình trượt ngang (điện thoại, máy tính bảng): thanh chọn bước + vạch tiến độ đi theo
+  const track = document.getElementById('cac-buoc');
+  const chips = [...document.querySelectorAll('.step-nav a')];
+  if (track && chips.length) {
+    const cards = [...track.children];
+    const bar = document.querySelector('.step-bar i');
+    const sliding = () => getComputedStyle(track).display === 'flex';
+    let cur = -1;
+    const setActive = k => {
+      if (k === cur) return;
+      cur = k;
+      chips.forEach((a, i) => {
+        a.classList.toggle('is-here', i === k);
+        if (i === k) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current');
+      });
+      if (bar) bar.style.setProperty('--k', k);
+      const nav = chips[k].parentElement, chip = chips[k];
+      if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: chip.offsetLeft - (nav.clientWidth - chip.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    };
+    let busy = false;
+    track.addEventListener('scroll', () => {
+      if (busy) return;
+      busy = true;
+      requestAnimationFrame(() => {
+        busy = false;
+        const step = cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
+        const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+        setActive(atEnd ? cards.length - 1 : Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / step))));
+      });
+    }, { passive: true });
+    chips.forEach((a, i) => a.addEventListener('click', e => {
+      if (!sliding()) return; // máy tính: 4 bước đã hiện đủ, để link cuộn trang như thường
+      e.preventDefault();
+      track.scrollTo({ left: cards[i].offsetLeft - cards[0].offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
+      setActive(i);
+    }));
+    setActive(0);
+  }
+
   // ---- iOS chỉ áp trạng thái :active (bấm giữ) khi trang có lắng nghe chạm
   document.addEventListener('touchstart', () => {}, { passive: true });
 
