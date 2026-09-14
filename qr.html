@@ -26,7 +26,7 @@
 <link rel="preload" as="image" href="assets/img/chum-sam-doc.webp">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-<link rel="stylesheet" href="assets/css/style.css?v=8">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
 <!-- ĐẾM LƯỢT XEM: dán mã Cloudflare Web Analytics vào đây khi có tài khoản. /qr = lượt quét tem chai, / = lượt vào từ link. -->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"LocalBusiness","name":"Sơn Linh Tửu","legalName":"Hộ kinh doanh Nguyễn Chí Sơn","slogan":"Tinh hoa núi rừng","telephone":"+84978404779","url":"https://nghtloc14.github.io/sonlinhtuu/","image":"https://nghtloc14.github.io/sonlinhtuu/assets/img/og.jpg","address":{"@type":"PostalAddress","streetAddress":"Số 103, thôn Lăng Kú, xã Gung Ré","addressLocality":"Di Linh","addressRegion":"Lâm Đồng","addressCountry":"VN"},"sameAs":["https://www.facebook.com/vinh.son.908"]}
@@ -50,7 +50,7 @@
     </nav>
     <div class="top__act">
       <a class="top__phone" href="tel:0978404779"><small>Gọi · Zalo</small>0978 404 779</a>
-      <button class="btn btn--gold btn--sm" type="button" data-open="dat-hang">Đặt hàng</button>
+      <button class="btn btn--line btn--sm" type="button" data-open="dat-hang">Liên hệ</button>
     </div>
   </div>
 </header>
@@ -159,12 +159,6 @@
       <span class="orn" aria-hidden="true"><i></i></span>
     </div>
 
-    <nav class="step-nav" aria-label="Chọn bước">
-      <a href="#buoc-1" class="is-here" aria-current="step"><b>01</b>Nấu nếp</a>
-      <a href="#buoc-2"><b>02</b>Lên men</a>
-      <a href="#buoc-3"><b>03</b>Chưng cất</a>
-      <a href="#buoc-4"><b>04</b>Ủ rượu</a>
-    </nav>
     <ol class="steps" id="cac-buoc">
       <li class="step" id="buoc-1">
         <span class="step__n" aria-hidden="true"><b>01</b></span>
@@ -211,10 +205,6 @@
         </div>
       </li>
     </ol>
-    <div class="step-foot" aria-hidden="true">
-      <span class="step-bar"><i></i></span>
-      <span class="step-hint">Vuốt ngang để xem tiếp</span>
-    </div>
   </div>
 </section>
 
@@ -262,30 +252,28 @@
     </div>
     <ul class="docs">
       <li class="doc">
-        <button class="doc__img" type="button" data-doc="giay-phep" aria-label="Xem bản giấy phép sản xuất rượu">
-          <img src="assets/img/the-giay-phep.webp" width="520" height="333" loading="lazy" alt="">
+        <button class="doc__paper" type="button" data-doc="giay-phep" aria-label="Xem bản giấy phép sản xuất rượu">
+          <img src="assets/img/giay-phep-nho.webp" width="200" height="283" loading="lazy" alt="">
+          <span class="doc__zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg></span>
         </button>
         <div class="doc__info">
-          <h3>Giấy phép sản xuất rượu thủ công nhằm mục đích kinh doanh</h3>
-          <dl class="doc__meta">
-            <div><dt>Số</dt><dd class="doc__so">04/GP-KT&amp;HT</dd></div>
-            <div><dt>Cơ quan cấp</dt><dd>Phòng Kinh tế và Hạ tầng huyện Di Linh</dd></div>
-            <div><dt>Hiệu lực</dt><dd>5 năm, từ 17/11/2023</dd></div>
-          </dl>
+          <p class="doc__kind">Giấy phép</p>
+          <h3>Sản xuất rượu thủ công nhằm mục đích kinh doanh</h3>
+          <p class="doc__so">Số 04/GP-KT&amp;HT</p>
+          <p class="doc__meta">Phòng Kinh tế và Hạ tầng huyện Di Linh<br>Hiệu lực 5 năm, từ 17/11/2023</p>
           <button class="link link--btn" type="button" data-doc="giay-phep">Xem bản giấy <span aria-hidden="true">→</span></button>
         </div>
       </li>
       <li class="doc">
-        <button class="doc__img" type="button" data-doc="attp" aria-label="Xem bản chứng nhận an toàn thực phẩm">
-          <img src="assets/img/the-attp.webp" width="520" height="314" loading="lazy" alt="">
+        <button class="doc__paper" type="button" data-doc="attp" aria-label="Xem bản giấy chứng nhận an toàn thực phẩm">
+          <img src="assets/img/giay-attp-nho.webp" width="200" height="283" loading="lazy" alt="">
+          <span class="doc__zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg></span>
         </button>
         <div class="doc__info">
-          <h3>Giấy chứng nhận cơ sở đủ điều kiện an toàn thực phẩm</h3>
-          <dl class="doc__meta">
-            <div><dt>Số</dt><dd class="doc__so">07/GCN.ATTP</dd></div>
-            <div><dt>Cơ quan cấp</dt><dd>Phòng Kinh tế và Hạ tầng huyện Di Linh</dd></div>
-            <div><dt>Hiệu lực</dt><dd>Đến 27/10/2026</dd></div>
-          </dl>
+          <p class="doc__kind">Giấy chứng nhận</p>
+          <h3>Cơ sở đủ điều kiện an toàn thực phẩm</h3>
+          <p class="doc__so">Số 07/GCN.ATTP</p>
+          <p class="doc__meta">Phòng Kinh tế và Hạ tầng huyện Di Linh<br>Hiệu lực đến 27/10/2026</p>
           <button class="link link--btn" type="button" data-doc="attp">Xem bản giấy <span aria-hidden="true">→</span></button>
         </div>
       </li>
@@ -298,32 +286,19 @@
   <div class="wrap contact">
     <div class="contact__text">
       <div class="head head--start">
-        <p class="kicker">Gọi hoặc nhắn Zalo cho cơ sở</p>
-        <h2 id="lh" class="h2"><span>Liên hệ</span> <span class="gold-text">đặt hàng</span></h2>
+        <p class="kicker">Hỏi thông tin hoặc đặt rượu</p>
+        <h2 id="lh" class="h2"><span>Liên hệ</span> <span class="gold-text">cơ sở</span></h2>
         <span class="orn" aria-hidden="true"><i></i></span>
       </div>
-      <p class="contact__lead">Cơ sở nhận đặt hàng qua điện thoại và Zalo. Số <strong>0978 404 779</strong> dùng được cả gọi và Zalo.</p>
+      <p class="contact__lead">Hộ kinh doanh Nguyễn Chí Sơn, thôn Lăng Kú, xã Gung Ré, Di Linh. Số 0978 404 779 dùng được cả gọi và Zalo.</p>
     </div>
-    <div class="contact__actions">
-      <a class="btn btn--gold btn--lg" href="tel:0978404779">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg>
-        Gọi 0978 404 779
-      </a>
-      <a class="btn btn--line btn--lg" href="tel:0911404779">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg>
-        Gọi 0911 404 779
-      </a>
-      <div class="contact__row">
-        <a class="btn btn--line" href="https://zalo.me/0978404779" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c-4.8 0-8.5 3.2-8.5 7.2 0 2.2 1.1 4.1 2.9 5.4L5.8 20l3.3-1.6c.9.3 1.9.4 2.9.4 4.8 0 8.5-3.2 8.5-7.3S16.8 4 12 4z"/></svg>
-          Zalo
-        </a>
-        <a class="btn btn--line" href="https://www.facebook.com/vinh.son.908" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 21v-8h2.6l.4-3H14V8.2c0-.9.3-1.4 1.5-1.4H17V4.2A20 20 0 0 0 14.8 4C12.6 4 11 5.4 11 7.9V10H8.5v3H11v8"/></svg>
-          Facebook
-        </a>
-      </div>
-    </div>
+    <ul class="contact__list">
+      <li><a href="tel:0978404779"><span class="ci" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg></span><span class="cl">Điện thoại · Zalo</span><strong>0978 404 779</strong></a></li>
+      <li><a href="tel:0911404779"><span class="ci" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg></span><span class="cl">Điện thoại</span><strong>0911 404 779</strong></a></li>
+      <li><a href="https://zalo.me/0978404779" target="_blank" rel="noopener"><span class="ci" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4c-4.8 0-8.5 3.2-8.5 7.2 0 2.2 1.1 4.1 2.9 5.4L5.8 20l3.3-1.6c.9.3 1.9.4 2.9.4 4.8 0 8.5-3.2 8.5-7.3S16.8 4 12 4z"/></svg></span><span class="cl">Zalo</span><strong>Nhắn tin</strong></a></li>
+      <li><a href="https://www.facebook.com/vinh.son.908" target="_blank" rel="noopener"><span class="ci" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 21v-8h2.6l.4-3H14V8.2c0-.9.3-1.4 1.5-1.4H17V4.2A20 20 0 0 0 14.8 4C12.6 4 11 5.4 11 7.9V10H8.5v3H11v8"/></svg></span><span class="cl">Facebook</span><strong>Sơn Linh Tửu</strong></a></li>
+      <li><a href="https://www.google.com/maps/search/?api=1&amp;query=S%E1%BB%91%20103%20th%C3%B4n%20L%C4%83ng%20K%C3%BA%2C%20x%C3%A3%20Gung%20R%C3%A9%2C%20Di%20Linh%2C%20L%C3%A2m%20%C4%90%E1%BB%93ng" target="_blank" rel="noopener"><span class="ci" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/></svg></span><span class="cl">Địa chỉ</span><strong>Chỉ đường</strong></a></li>
+    </ul>
   </div>
 </section>
 
@@ -351,20 +326,19 @@
 
 <!-- Thanh liên hệ cố định: điện thoại và máy tính bảng -->
 <nav class="bar" aria-label="Liên hệ nhanh">
-  <a class="bar__call" href="tel:0978404779">
-    <span class="bar__ring" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg></span>
-    <span class="bar__txt"><small>Gọi đặt hàng</small><b>0978 404 779</b></span>
-  </a>
-  <a class="bar__zalo" href="https://zalo.me/0978404779" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c-4.8 0-8.5 3.2-8.5 7.2 0 2.2 1.1 4.1 2.9 5.4L5.8 20l3.3-1.6c.9.3 1.9.4 2.9.4 4.8 0 8.5-3.2 8.5-7.3S16.8 4 12 4z"/></svg>Zalo</a>
-  <button class="bar__more" type="button" data-open="dat-hang" aria-label="Thêm cách liên hệ: số thứ hai, Facebook, chỉ đường"><i></i><i></i><i></i></button>
+  <a href="tel:0978404779"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg>Gọi</a>
+  <a href="https://zalo.me/0978404779" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c-4.8 0-8.5 3.2-8.5 7.2 0 2.2 1.1 4.1 2.9 5.4L5.8 20l3.3-1.6c.9.3 1.9.4 2.9.4 4.8 0 8.5-3.2 8.5-7.3S16.8 4 12 4z"/></svg>Zalo</a>
+  <button class="bar__main" type="button" data-open="dat-hang"><span class="bar__coin"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4"/></svg></span>Liên hệ</button>
+  <a href="https://www.facebook.com/vinh.son.908" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 21v-8h2.6l.4-3H14V8.2c0-.9.3-1.4 1.5-1.4H17V4.2A20 20 0 0 0 14.8 4C12.6 4 11 5.4 11 7.9V10H8.5v3H11v8"/></svg>Facebook</a>
+  <a href="https://www.google.com/maps/search/?api=1&amp;query=S%E1%BB%91%20103%20th%C3%B4n%20L%C4%83ng%20K%C3%BA%2C%20x%C3%A3%20Gung%20R%C3%A9%2C%20Di%20Linh%2C%20L%C3%A2m%20%C4%90%E1%BB%93ng" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/></svg>Chỉ đường</a>
 </nav>
 
 <dialog class="sheet" id="dat-hang" aria-labelledby="dh">
   <div class="sheet__head">
-    <h2 id="dh">Liên hệ đặt hàng</h2>
+    <h2 id="dh">Liên hệ cơ sở</h2>
     <button class="x" type="button" data-close aria-label="Đóng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
   </div>
-  <p>Cơ sở nhận đặt hàng qua điện thoại và Zalo</p>
+  <p>Hộ kinh doanh Nguyễn Chí Sơn · Di Linh, Lâm Đồng</p>
   <a class="sheet__opt" href="tel:0978404779"><span class="sheet__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg></span><span class="sheet__lbl">Gọi · Zalo</span><strong>0978 404 779</strong></a>
   <a class="sheet__opt" href="tel:0911404779"><span class="sheet__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg></span><span class="sheet__lbl">Gọi</span><strong>0911 404 779</strong></a>
   <a class="sheet__opt" href="https://zalo.me/0978404779" target="_blank" rel="noopener"><span class="sheet__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4c-4.8 0-8.5 3.2-8.5 7.2 0 2.2 1.1 4.1 2.9 5.4L5.8 20l3.3-1.6c.9.3 1.9.4 2.9.4 4.8 0 8.5-3.2 8.5-7.3S16.8 4 12 4z"/></svg></span><span class="sheet__lbl">Nhắn Zalo</span><strong>Mở Zalo</strong></a>
@@ -380,6 +354,6 @@
   <div class="viewer__pages"></div>
 </dialog>
 
-<script src="assets/js/main.js?v=6" defer></script>
+<script src="assets/js/main.js?v=7" defer></script>
 </body>
 </html>
