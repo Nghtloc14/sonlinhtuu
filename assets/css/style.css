@@ -213,14 +213,14 @@ p { text-wrap: pretty; }
   position: absolute; z-index: 1; left: -33px; top: 18px; width: 19px; height: 19px;
   transform: rotate(45deg); border: 1px solid var(--vang); background: var(--rung); box-shadow: 0 0 0 6px var(--rung);
 }
-.step__head { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 18px; }
+.step__head { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 26px; } /* chừa chỗ khung video nhấc lên khi rê chuột */
 .step__no {
   flex: none; font: 600 70px/.82 var(--display); letter-spacing: .01em;
   color: transparent; -webkit-text-stroke: 1px rgba(216,180,107,.65);
 }
 .step__of { margin: 0 0 4px; font: 600 11.5px/1.4 var(--text); letter-spacing: .2em; text-transform: uppercase; color: var(--chu-mo); }
 .step__t { margin: 0; font: 600 clamp(28px, 8vw, 34px)/1.12 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--kem); }
-.step__desc { margin: 16px 0 0; font-size: 16.5px; line-height: 1.65; color: var(--chu); }
+.step__desc { margin: 22px 0 0; font-size: 16.5px; line-height: 1.65; color: var(--chu); }
 .step__body > .frame { width: min(100%, calc((100vh - 270px) * .8 + 12px)); width: min(100%, calc((100svh - 270px - env(safe-area-inset-bottom, 0px)) * .8 + 12px)); }
 
 /* Bước đang xem: các bước khác dịu xuống để mắt tập trung */
@@ -229,7 +229,7 @@ p { text-wrap: pretty; }
 .step__n, .step__no, .step .frame { transition: background-color .45s ease, box-shadow .45s ease, color .45s ease, -webkit-text-stroke-color .45s ease, border-color .45s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
 .step.is-active .step__n { background: var(--vang); box-shadow: 0 0 0 6px var(--rung), 0 0 20px rgba(216,180,107,.75); }
 .step.is-active .step__no { color: rgba(216,180,107,.16); -webkit-text-stroke-color: var(--vang-sang); }
-.step.is-active .frame { border-color: var(--vang-sang); box-shadow: 0 24px 50px -24px rgba(0,0,0,.7), 0 0 44px -14px rgba(216,180,107,.45); }
+.step.is-active .frame { border-color: var(--vang-sang); box-shadow: 0 24px 50px -24px rgba(0,0,0,.7), 0 0 34px -16px rgba(216,180,107,.45); }
 
 /* ---------- Về cơ sở ---------- */
 .about__lead { margin: 0 auto 24px; max-width: 36em; font-size: 16.5px; color: var(--chu); text-align: center; }

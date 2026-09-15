@@ -24,15 +24,19 @@
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-normal-500-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-normal-500-vietnamese.woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/chum-sam-doc.webp">
-<script>document.documentElement.classList.add('js')</script>
+<script>(function(){var d=document.documentElement,s=location.search;d.classList.add('js');var mau=/[?&]loader=/.test(s),qr=mau||/\/qr(\.html)?\/?$/.test(location.pathname);if(!qr)return;var da=false;try{da=sessionStorage.getItem('slt-cho')==='1';sessionStorage.setItem('slt-cho','1')}catch(e){}if(mau||!da)d.classList.add('cho-dang')})();</script>
 <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-<link rel="stylesheet" href="assets/css/style.css?v=22">
+<link rel="stylesheet" href="assets/css/style.css?v=23">
+<link rel="stylesheet" href="assets/css/cho.css?v=3">
 <!-- ĐẾM LƯỢT XEM: dán mã Cloudflare Web Analytics vào đây khi có tài khoản. /qr = lượt quét tem chai, / = lượt vào từ link. -->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"LocalBusiness","name":"Sơn Linh Tửu","legalName":"Hộ kinh doanh Nguyễn Chí Sơn","slogan":"Tinh hoa núi rừng","telephone":"+84978404779","url":"https://nghtloc14.github.io/sonlinhtuu/","image":"https://nghtloc14.github.io/sonlinhtuu/assets/img/og.jpg","address":{"@type":"PostalAddress","streetAddress":"Số 103, thôn Lăng Kú, xã Gung Ré","addressLocality":"Di Linh","addressRegion":"Lâm Đồng","addressCountry":"VN"},"sameAs":["https://www.facebook.com/vinh.son.908"]}
 </script>
 </head>
 <body>
+<!-- Khách quét mã trên chai (/qr): màn chờ Vòm sâm ngắn, mỗi phiên một lần, chạm để bỏ qua -->
+<div class="chao" data-chao aria-hidden="true"></div>
+<script src="assets/js/cho.js?v=3"></script>
 <a class="skip" href="#noi-dung">Bỏ qua, tới nội dung</a>
 
 <!-- Thanh trên cùng: chỉ hiện trên máy tính -->
