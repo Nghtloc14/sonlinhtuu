@@ -164,7 +164,13 @@ p { text-wrap: pretty; }
 
 /* ---------- Ba điểm nhấn: khung vòm chạy video, số viền vàng, tiêu đề hai màu ---------- */
 .diem-sec { padding-top: 52px; background: radial-gradient(90% 40% at 50% 0%, rgba(216,180,107,.09), transparent 70%), linear-gradient(180deg, var(--rung), var(--rung-2)); }
-#quy-trinh { background: linear-gradient(180deg, var(--rung-3), #0C2217 30%, var(--rung-3)); }
+/* Phần nền nâu đỏ màu rượu (như nhãn Rượu Dâu): Quy trình, Giấy tờ. Xen với xanh rừng để lướt qua là biết đã sang phần mới */
+.sec--ruou {
+  --nen: #231010;
+  --chu-mo: #BCA999;
+  background: radial-gradient(90% 50% at 50% 0%, rgba(216,180,107,.07), transparent 70%), linear-gradient(180deg, #2B1412 0%, #231010 45%, #1D0D0C 100%);
+}
+.sec--ruou .frame { background: rgba(0,0,0,.28); }
 .diem-list { display: grid; gap: 40px; max-width: 520px; margin: 0 auto; }
 .diem { display: grid; grid-template-columns: 43% 1fr; gap: 22px; align-items: center; }
 .diem:nth-child(even) { grid-template-columns: 1fr 43%; }
@@ -212,7 +218,7 @@ p { text-wrap: pretty; }
 .step + .step { margin-top: 64px; }
 .step__n {
   position: absolute; z-index: 1; left: -33px; top: 18px; width: 19px; height: 19px;
-  transform: rotate(45deg); border: 1px solid var(--vang); background: var(--rung-3); box-shadow: 0 0 0 6px var(--rung-3);
+  transform: rotate(45deg); border: 1px solid var(--vang); background: var(--nen, var(--rung)); box-shadow: 0 0 0 6px var(--nen, var(--rung));
 }
 .step__head { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 18px; }
 .step__no {
@@ -227,7 +233,7 @@ p { text-wrap: pretty; }
 .step { transition: opacity .6s ease; }
 .steps.is-live .step:not(.is-active) { opacity: .45; }
 .step__n, .step__no, .step .frame { transition: background-color .45s ease, box-shadow .45s ease, color .45s ease, -webkit-text-stroke-color .45s ease, border-color .45s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
-.step.is-active .step__n { background: var(--vang); box-shadow: 0 0 0 6px var(--rung-3), 0 0 20px rgba(216,180,107,.75); }
+.step.is-active .step__n { background: var(--vang); box-shadow: 0 0 0 6px var(--nen, var(--rung)), 0 0 20px rgba(216,180,107,.75); }
 .step.is-active .step__no { color: rgba(216,180,107,.16); -webkit-text-stroke-color: var(--vang-sang); }
 .step.is-active .frame { border-color: var(--vang-sang); box-shadow: 0 24px 50px -24px rgba(0,0,0,.7), 0 0 44px -14px rgba(216,180,107,.45); }
 
@@ -522,9 +528,9 @@ p { text-wrap: pretty; }
   .hero__in { column-gap: 96px; }
 }
 
-/* Máy tính hẹp: chừa lề phải cho cụm nút hỗ trợ, không đè lên nội dung */
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .wrap, .hero__in { width: min(100% - 160px, 1180px); }
+/* Máy tính dưới 1440px: chừa lề 100px mỗi bên cho cụm nút nổi (52px + cách góc 40px), không đè lên nội dung */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .wrap, .hero__in { width: min(100% - 200px, 1180px); }
 }
 
 /* Máy tính màn thấp (laptop 1280×720, 1366×768): thu khoảng cách để bấm menu thấy trọn từng phần */
@@ -675,79 +681,59 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
   .hero .mtn { transform: none !important; }
 }
 
-/* ===================== Cụm hỗ trợ bên phải ===================== */
-/* Điện thoại, máy tính bảng: nút tròn vàng, bấm mở Zalo / Messenger / Gọi; nút lên đầu trang nằm bên trái.
-   Máy tính: 3 nút luôn hiện, rê chuột hiện nhãn; nút lên đầu trang ở dưới. Không rung, không nhấp nháy. */
+/* ===================== Nút nổi ===================== */
+/* Điện thoại, máy tính bảng: chỉ còn nút lên đầu trang — liên hệ đã có thanh 5 nút dưới đáy, không lặp lại.
+   Máy tính (không có thanh dưới): Zalo, Messenger, Gọi xếp dọc, rê chuột hiện nhãn; nút lên đầu trang ở dưới.
+   Lề: điện thoại cách mép 16px, cách thanh dưới 24px; máy tính cách góc 40px (Material Design 16/24px, PNJ 35–50px). */
 .fab {
-  position: fixed; z-index: 35; right: 14px; bottom: calc(var(--bar-h) + var(--safe-b) + 14px);
-  display: grid; grid-template-areas: "list list" "top toggle"; column-gap: 12px; row-gap: 12px; justify-items: end; align-items: center;
-  pointer-events: none;
+  position: fixed; z-index: 35; right: 16px; bottom: calc(var(--bar-h) + var(--safe-b) + 24px);
+  display: grid; justify-items: end; gap: 14px; pointer-events: none;
 }
-.fab::before { content: ""; position: fixed; inset: 0; z-index: -1; background: rgba(3,10,6,.5); opacity: 0; transition: opacity .3s ease; }
-.fab.is-open::before { opacity: 1; pointer-events: auto; }
-.fab__list { grid-area: list; list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; justify-items: end; }
-.fab__list li { pointer-events: auto; opacity: 0; visibility: hidden; transform: translateY(16px) scale(.92); transition: opacity .28s ease, transform .4s cubic-bezier(.2,.7,.2,1), visibility 0s linear .4s; }
-.fab.is-open .fab__list li { opacity: 1; visibility: visible; transform: none; transition-delay: calc(var(--k) * 55ms), calc(var(--k) * 55ms), 0s; }
-.fab__list li:nth-child(3) { --k: 0; }
-.fab__list li:nth-child(2) { --k: 1; }
-.fab__list li:nth-child(1) { --k: 2; }
-.fab__btn { display: flex; align-items: center; gap: 10px; text-decoration: none; -webkit-tap-highlight-color: transparent; }
-.fab__ico {
-  flex: none; display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%;
-  background: rgba(10,28,19,.94); border: 1px solid rgba(216,180,107,.6); color: var(--vang-sang);
-  box-shadow: 0 10px 24px -8px rgba(0,0,0,.65);
-  transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .3s ease, box-shadow .35s ease, background-color .3s ease;
-}
-.fab__ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.fab__ico b { font: 700 13px/1 var(--text); letter-spacing: -.01em; }
-.fab__bub { display: none; }
-.fab__btn--call .fab__ico { background: var(--gold-flat); border-color: transparent; color: #1B1407; }
-.fab__btn:active .fab__ico { transform: scale(.9); }
-.fab__tip {
-  padding: 9px 14px; border-radius: 999px; white-space: nowrap;
-  background: rgba(10,28,19,.96); border: 1px solid rgba(216,180,107,.4); color: var(--kem);
-  font: 500 14px/1 var(--text); box-shadow: 0 8px 20px -8px rgba(0,0,0,.6);
-}
-.fab__toggle {
-  grid-area: toggle; pointer-events: auto; position: relative; display: grid; place-items: center;
-  width: 54px; height: 54px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
-  background: var(--gold-flat); color: #1B1407;
-  box-shadow: 0 0 0 4px rgba(14,37,25,.9), 0 0 0 5px rgba(216,180,107,.45), 0 12px 26px -8px rgba(0,0,0,.7);
-  transition: transform .2s ease;
-}
-.fab__toggle svg { grid-area: 1 / 1; width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .4s cubic-bezier(.2,.7,.2,1), opacity .25s ease; }
-.fab__close { opacity: 0; transform: rotate(-90deg) scale(.5); }
-.fab.is-open .fab__open { opacity: 0; transform: rotate(90deg) scale(.5); }
-.fab.is-open .fab__close { opacity: 1; transform: none; }
-.fab__toggle:active { transform: scale(.92); }
+.fab__list { display: none; list-style: none; margin: 0; padding: 0; }
 .fab__top {
-  grid-area: top; pointer-events: auto; position: relative; display: grid; place-items: center;
-  width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  pointer-events: auto; position: relative; display: grid; place-items: center;
+  width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
   background: rgba(10,28,19,.94); color: var(--vang-sang); box-shadow: 0 10px 24px -8px rgba(0,0,0,.65);
   opacity: 0; visibility: hidden; transform: translateY(12px);
   transition: opacity .35s ease, transform .4s cubic-bezier(.2,.7,.2,1), visibility 0s linear .4s;
 }
+.fab__top::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; } /* vùng chạm rộng hơn nút */
 .fab.show-top .fab__top { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
-.fab.is-open .fab__top { opacity: 0; visibility: hidden; }
 .fab__ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 .fab__ring circle { fill: none; stroke: rgba(216,180,107,.22); stroke-width: 2; }
 .fab__ring .fab__ring-p { stroke: var(--vang); stroke-linecap: round; stroke-dasharray: 138.23; stroke-dashoffset: calc(138.23px * (1 - var(--p, 0))); }
-.fab__arrow { position: relative; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.fab__arrow { position: relative; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
 .fab__top:active .fab__arrow { transform: translateY(-4px); }
 
 @media (min-width: 1024px) {
-  .fab { right: 22px; bottom: 24px; grid-template-areas: "list" "top"; }
-  .fab::before, .fab__toggle { display: none; }
-  .fab__list li { opacity: 1; visibility: visible; transform: none; animation: fab-vao .6s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(.9s + var(--k) * 90ms); }
-  /* Nhãn ẩn vẫn chiếm chỗ: chỉ vòng tròn nhận chuột, để không chặn bấm vào nội dung phía sau */
-  .fab__list li { pointer-events: none; }
-  .fab__ico, .fab__top { pointer-events: auto; }
-  .fab__tip { opacity: 0; transform: translateX(10px); pointer-events: none; transition: opacity .25s ease, transform .35s cubic-bezier(.2,.7,.2,1); }
+  .fab { right: 40px; bottom: 40px; }
+  .fab__list { display: grid; gap: 14px; justify-items: end; }
+  /* Nhãn ẩn vẫn chiếm chỗ: chỉ vòng tròn nhận chuột, không chặn bấm vào nội dung phía sau */
+  .fab__list li { pointer-events: none; animation: fab-vao .6s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(.9s + var(--k) * 90ms); }
+  .fab__list li:nth-child(1) { --k: 0; }
+  .fab__list li:nth-child(2) { --k: 1; }
+  .fab__list li:nth-child(3) { --k: 2; }
+  .fab__btn { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .fab__ico {
+    pointer-events: auto; flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(10,28,19,.94); border: 1px solid rgba(216,180,107,.6); color: var(--vang-sang);
+    box-shadow: 0 10px 24px -8px rgba(0,0,0,.65);
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .3s ease, box-shadow .35s ease;
+  }
+  .fab__ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .fab__ico b { font: 700 13px/1 var(--text); letter-spacing: -.01em; }
+  .fab__ico .fab__bub { display: none; }
+  .fab__btn--call .fab__ico { background: var(--gold-flat); border-color: transparent; color: #1B1407; }
+  .fab__tip {
+    padding: 9px 14px; border-radius: 999px; white-space: nowrap;
+    background: rgba(10,28,19,.96); border: 1px solid rgba(216,180,107,.4); color: var(--kem);
+    font: 500 14px/1 var(--text); box-shadow: 0 8px 20px -8px rgba(0,0,0,.6);
+    opacity: 0; transform: translateX(10px); pointer-events: none; transition: opacity .25s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+  }
   .fab__btn:hover .fab__tip, .fab__btn:focus-visible .fab__tip { opacity: 1; transform: none; }
   .fab__btn:hover .fab__ico { transform: translateY(-3px) scale(1.06); border-color: var(--vang-sang); box-shadow: 0 16px 30px -10px rgba(0,0,0,.7), 0 0 22px -4px rgba(216,180,107,.5); }
   .fab__btn--call:hover .fab__ico { box-shadow: 0 16px 30px -10px rgba(0,0,0,.7), 0 0 26px -2px rgba(216,180,107,.7); }
   .fab__top:hover .fab__arrow { transform: translateY(-4px); }
-  .fab__top { justify-self: end; margin-right: 2px; }
 }
 @keyframes fab-vao { from { opacity: 0; transform: translateX(24px); } }
 
@@ -772,79 +758,5 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 .js .head.is-in .orn i { animation: thoi .8s .1s cubic-bezier(.2,.7,.2,1) both; }
 @media (min-width: 1024px) {
   .js .head--start.is-in .orn::after { transform-origin: left; animation-name: ke; }
-}
-
-/* ===================== Ranh giới giữa các phần ===================== */
-/* Mỗi phần mới mở bằng một vạch vàng và huy hiệu ở giữa, như trang mới của một cuốn sách */
-.sec--mo::before {
-  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(216,180,107,.6) 25%, rgba(216,180,107,.6) 75%, transparent);
-}
-.sec--mo::after {
-  content: ""; position: absolute; top: -25px; left: 50%; width: 50px; height: 50px; margin-left: -25px; border-radius: 50%; pointer-events: none;
-  background: url("../img/bieu-tuong-vang.webp") center / 28px auto no-repeat, var(--rung-3);
-  border: 1px solid rgba(216,180,107,.7); box-shadow: 0 0 0 5px var(--rung-3), 0 0 26px -4px rgba(216,180,107,.45);
-}
-
-/* ===================== Điện thoại, máy tính bảng: thanh "Đang xem" ===================== */
-.mnav { display: none; }
-@keyframes doi-ten { from { opacity: 0; transform: translateY(10px); } }
-@media (max-width: 1023px) {
-  html { scroll-padding-top: 66px; }
-  .mnav {
-    display: block; position: fixed; z-index: 36; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px);
-    background: rgba(8,22,15,.95); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(216,180,107,.35); box-shadow: 0 12px 30px -12px rgba(0,0,0,.7);
-    transform: translateY(-110%); transition: transform .45s cubic-bezier(.2,.7,.2,1);
-  }
-  .mnav.is-on, .mnav.is-open { transform: none; }
-  .mnav__bar { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; height: 58px; padding: 0 14px 0 16px; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; }
-  .mnav__bar img { flex: none; width: 30px; height: auto; }
-  .mnav__label { flex: 1; min-width: 0; display: grid; }
-  .mnav__label small { font: 600 10.5px/1.4 var(--text); letter-spacing: .16em; text-transform: uppercase; color: var(--chu-mo); }
-  .mnav__label small span { color: var(--vang); }
-  .mnav__label b { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 600 18px/1.3 var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--kem); }
-  .mnav__label b.is-swap { animation: doi-ten .5s cubic-bezier(.2,.7,.2,1); }
-  .mnav__chev { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid rgba(216,180,107,.45); border-radius: 50%; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
-  .mnav__chev svg { width: 16px; height: 16px; fill: none; stroke: var(--vang-sang); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .mnav.is-open .mnav__chev { transform: rotate(180deg); }
-  .mnav__progress { position: absolute; left: 0; bottom: -1px; width: 100%; height: 2px; transform-origin: left; transform: scaleX(var(--doc, 0)); background: linear-gradient(90deg, var(--vang), var(--vang-sang)); }
-  .mnav__list { display: none; list-style: none; margin: 0; padding: 6px 10px 12px; }
-  .mnav.is-open .mnav__list { display: grid; gap: 2px; animation: hop-len .3s cubic-bezier(.2,.7,.2,1); }
-  .mnav__list a { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: var(--chu); font: 500 16px/1.3 var(--text); }
-  .mnav__list b { width: 24px; font: 600 15px/1 var(--display); color: var(--vang); }
-  .mnav__list a.is-here { background: rgba(216,180,107,.1); color: var(--kem); font-weight: 600; }
-  .mnav__list a:active { background: rgba(216,180,107,.18); }
-
-  /* ===== Cụm hỗ trợ trên điện thoại: một hàng ngang ngay trên thanh 5 nút, trong tầm ngón cái ===== */
-  .fab {
-    left: 12px; right: 12px; bottom: calc(var(--bar-h) + var(--safe-b) + 12px);
-    grid-template-columns: 1fr auto; grid-template-areas: ". top" "list toggle";
-    column-gap: 10px; row-gap: 14px; justify-items: stretch; align-items: end;
-  }
-  .fab__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-self: stretch; justify-items: stretch; }
-  .fab__btn--zalo .fab__ico b { display: none; }
-  .fab__btn--zalo .fab__bub { display: block; }
-  /* Màn hình đầu để trống cho ảnh và tên thương hiệu: nút tròn chỉ hiện khi đã cuộn xuống */
-  .fab__toggle { transition: transform .2s ease, opacity .35s ease, visibility 0s linear .35s; }
-  .fab:not(.show-fab) .fab__toggle { opacity: 0; visibility: hidden; transform: scale(.7); }
-  .fab.show-fab .fab__toggle { transition-delay: 0s; }
-  .fab__list li { display: flex; transform: translateX(22px) scale(.94); }
-  .fab__btn {
-    flex: 1; height: 58px; flex-direction: column-reverse; justify-content: center; gap: 5px; border-radius: 16px;
-    background: rgba(10,28,19,.97); border: 1px solid rgba(216,180,107,.5); box-shadow: 0 14px 28px -12px rgba(0,0,0,.75);
-    transition: transform .15s ease;
-  }
-  .fab__btn:active { transform: scale(.95); }
-  .fab__btn .fab__ico { width: auto; height: auto; background: none; border: 0; box-shadow: none; }
-  .fab__btn .fab__ico svg { width: 22px; height: 22px; }
-  .fab__btn .fab__tip { padding: 0; background: none; border: 0; box-shadow: none; font: 600 12px/1 var(--text); letter-spacing: -.01em; color: var(--kem); }
-  .fab__long { display: none; }
-  .fab__btn--call { background: var(--gold-flat); border-color: transparent; }
-  .fab__btn--call .fab__ico, .fab__btn--call .fab__tip { color: #1B1407; }
-  .fab__toggle { justify-self: end; width: 58px; height: 58px; }
-  .fab__top { justify-self: end; width: 52px; height: 52px; margin-right: 3px; }
-  .fab__top::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; } /* vùng chạm rộng hơn nút */
-  .fab__arrow { width: 22px; height: 22px; }
 }
 
