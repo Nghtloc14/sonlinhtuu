@@ -132,11 +132,11 @@ p { text-wrap: pretty; }
 
 
 /* ---------- Khung chung các phần ---------- */
-.sec { position: relative; padding: 60px 0 64px; }
+.sec { position: relative; padding: 76px 0 64px; }
 .sec--pattern { background: var(--pattern), linear-gradient(180deg, var(--rung-2), var(--rung)); border-block: 1px solid rgba(216,180,107,.16); }
 .head { text-align: center; margin-bottom: 32px; }
 .kicker { margin: 0 0 10px; font-size: 14px; letter-spacing: .03em; color: var(--chu-mo); }
-.h2 { margin: 0; font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: clamp(32px, 9.6vw, 52px); line-height: 1.22; color: var(--kem); }
+.h2 { margin: 0; font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: clamp(40px, 12.8vw, 64px); line-height: 1.16; color: var(--kem); }
 .h2 span { display: block; }
 .orn { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; }
 .orn::before, .orn::after { content: ""; width: 56px; height: 1px; background: linear-gradient(90deg, transparent, var(--vang)); }
@@ -163,14 +163,7 @@ p { text-wrap: pretty; }
 }
 
 /* ---------- Ba điểm nhấn: khung vòm chạy video, số viền vàng, tiêu đề hai màu ---------- */
-.diem-sec { padding-top: 52px; background: radial-gradient(90% 40% at 50% 0%, rgba(216,180,107,.09), transparent 70%), linear-gradient(180deg, var(--rung), var(--rung-2)); }
-/* Phần nền nâu đỏ màu rượu (như nhãn Rượu Dâu): Quy trình, Giấy tờ. Xen với xanh rừng để lướt qua là biết đã sang phần mới */
-.sec--ruou {
-  --nen: #231010;
-  --chu-mo: #BCA999;
-  background: radial-gradient(90% 50% at 50% 0%, rgba(216,180,107,.07), transparent 70%), linear-gradient(180deg, #2B1412 0%, #231010 45%, #1D0D0C 100%);
-}
-.sec--ruou .frame { background: rgba(0,0,0,.28); }
+.diem-sec { padding-top: 52px; border-bottom: 1px solid rgba(216,180,107,.16); background: radial-gradient(90% 40% at 50% 0%, rgba(216,180,107,.09), transparent 70%), linear-gradient(180deg, var(--rung), var(--rung-2)); }
 .diem-list { display: grid; gap: 40px; max-width: 520px; margin: 0 auto; }
 .diem { display: grid; grid-template-columns: 43% 1fr; gap: 22px; align-items: center; }
 .diem:nth-child(even) { grid-template-columns: 1fr 43%; }
@@ -194,12 +187,6 @@ p { text-wrap: pretty; }
   transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
 }
 .diem__icon svg { width: 23px; height: 23px; fill: none; stroke: #1B1407; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.diem__no {
-  display: block; margin-bottom: 2px;
-  font: 600 56px/1 var(--display); letter-spacing: .02em;
-  color: transparent; -webkit-text-stroke: 1px rgba(216,180,107,.7);
-  transition: color .4s ease, -webkit-text-stroke-color .4s ease;
-}
 .diem__t { margin: 0 0 8px; font: 600 25px/1.2 var(--display); text-transform: uppercase; color: var(--kem); letter-spacing: .01em; }
 .diem__t span { display: block; }
 .diem__body p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--chu); }
@@ -218,7 +205,7 @@ p { text-wrap: pretty; }
 .step + .step { margin-top: 64px; }
 .step__n {
   position: absolute; z-index: 1; left: -33px; top: 18px; width: 19px; height: 19px;
-  transform: rotate(45deg); border: 1px solid var(--vang); background: var(--nen, var(--rung)); box-shadow: 0 0 0 6px var(--nen, var(--rung));
+  transform: rotate(45deg); border: 1px solid var(--vang); background: var(--rung); box-shadow: 0 0 0 6px var(--rung);
 }
 .step__head { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 18px; }
 .step__no {
@@ -226,14 +213,14 @@ p { text-wrap: pretty; }
   color: transparent; -webkit-text-stroke: 1px rgba(216,180,107,.65);
 }
 .step__of { margin: 0 0 4px; font: 600 11.5px/1.4 var(--text); letter-spacing: .2em; text-transform: uppercase; color: var(--chu-mo); }
-.step__t { margin: 0; font: 600 clamp(32px, 9.4vw, 40px)/1.12 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--kem); }
+.step__t { margin: 0; font: 600 clamp(28px, 8vw, 34px)/1.12 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--kem); }
 .step__desc { margin: 16px 0 0; font-size: 16.5px; line-height: 1.65; color: var(--chu); }
 
 /* Bước đang xem: các bước khác dịu xuống để mắt tập trung */
 .step { transition: opacity .6s ease; }
 .steps.is-live .step:not(.is-active) { opacity: .45; }
 .step__n, .step__no, .step .frame { transition: background-color .45s ease, box-shadow .45s ease, color .45s ease, -webkit-text-stroke-color .45s ease, border-color .45s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
-.step.is-active .step__n { background: var(--vang); box-shadow: 0 0 0 6px var(--nen, var(--rung)), 0 0 20px rgba(216,180,107,.75); }
+.step.is-active .step__n { background: var(--vang); box-shadow: 0 0 0 6px var(--rung), 0 0 20px rgba(216,180,107,.75); }
 .step.is-active .step__no { color: rgba(216,180,107,.16); -webkit-text-stroke-color: var(--vang-sang); }
 .step.is-active .frame { border-color: var(--vang-sang); box-shadow: 0 24px 50px -24px rgba(0,0,0,.7), 0 0 44px -14px rgba(216,180,107,.45); }
 
@@ -378,7 +365,6 @@ p { text-wrap: pretty; }
   .diem:nth-child(even) .diem__media { order: 0; }
   .diem:nth-child(even) .diem__body { text-align: center; }
   .diem__arch { width: min(100%, 300px); margin: 0 auto; }
-  .diem__no { font-size: 50px; }
   .diem__t { font-size: 24px; }
   .diem__body p { max-width: 22em; margin-inline: auto; }
 
@@ -450,7 +436,7 @@ p { text-wrap: pretty; }
   .head--start .orn { justify-content: flex-start; }
   .head--start .orn::before { display: none; }
   .head--start .orn::after { transform: none; width: 96px; background: linear-gradient(90deg, var(--vang), transparent); }
-  .h2 { font-size: clamp(44px, 4.2vw, 60px); }
+  .h2 { font-size: clamp(52px, 5vw, 72px); }
   .h2 span { display: inline; }
   .head--start .h2 span { display: block; }
   .kicker { font-size: 15px; }
@@ -459,7 +445,6 @@ p { text-wrap: pretty; }
   .diem-sec { padding-top: 96px; }
   .diem-list { max-width: none; gap: 48px; }
   .diem__arch { width: min(100%, 340px); }
-  .diem__no { font-size: 64px; margin-top: 6px; }
   .diem__t { font-size: 30px; }
   .diem__body p { font-size: 16px; }
 
@@ -482,7 +467,7 @@ p { text-wrap: pretty; }
   .step:nth-child(even) .step__head { justify-self: end; flex-direction: row-reverse; text-align: right; }
   .step:nth-child(even) .step__desc { justify-self: end; text-align: right; }
   .step__no { font-size: 104px; }
-  .step__t { font-size: 48px; }
+  .step__t { font-size: 40px; }
 
   /* Về cơ sở: chữ trái, ảnh phải */
   .about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 72px; align-items: center; }
@@ -552,14 +537,13 @@ p { text-wrap: pretty; }
   .title__l2 { font-size: 50px; }
   .hero__lead { font-size: 19px; }
   .arch { width: 540px; }
-  .h2 { font-size: 64px; }
+  .h2 { font-size: 78px; }
 }
 
 /* Điện thoại rất hẹp */
 @media (max-width: 370px) {
   .diem { gap: 16px; }
   .diem__t { font-size: 22px; }
-  .diem__no { font-size: 46px; }
   .diem__body p { font-size: 14.5px; }
   .seal { letter-spacing: .14em; gap: 8px; }
   .seal::before, .seal::after { width: 18px; }
@@ -615,7 +599,6 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
   .diem:hover .diem__arch { transform: translateY(-8px); border-color: var(--vang-sang); box-shadow: 0 0 0 4px var(--rung), 0 0 0 5px rgba(216,180,107,.6), 0 34px 60px -24px rgba(0,0,0,.9), 0 0 44px -8px rgba(216,180,107,.45); }
   .diem:hover .diem__arch img, .diem:hover .diem__arch video { transform: scale(1.08); }
   .diem:hover .diem__icon { transform: translateY(-8px) rotate(-10deg) scale(1.08); box-shadow: 0 0 0 4px var(--rung), 0 0 0 5px var(--vang-sang), 0 0 26px rgba(216,180,107,.6); }
-  .diem:hover .diem__no { color: rgba(216,180,107,.22); -webkit-text-stroke-color: var(--vang-sang); }
   .doc:hover { border-color: rgba(216,180,107,.6); box-shadow: 0 0 40px -18px rgba(216,180,107,.35); }
   .doc:hover .doc__paper { transform: rotate(0) translateY(-4px) scale(1.04); box-shadow: 6px 10px 0 -2px rgba(216,180,107,.18), 0 20px 30px -12px rgba(0,0,0,.8); }
   .place:hover { border-color: var(--vang); box-shadow: 0 0 40px -18px rgba(216,180,107,.45); }
