@@ -139,17 +139,25 @@
     }
   }
 
-  // ---- Nút lên đầu trang: hiện khi đã qua màn hình đầu, vòng vàng theo tiến độ đọc
+  // ---- Nút lên đầu trang: hiện khi đã qua màn hình đầu, vòng vàng theo tiến độ đọc.
+  // Điện thoại, máy tính bảng (nội dung tràn hết bề ngang): đang cuộn xuống đọc thì ẩn để không che chữ,
+  // cuộn ngược lên hoặc tới cuối trang thì hiện. Máy tính đã chừa lề nên luôn hiện.
   const fab = document.querySelector('[data-fab]');
   const topBtn = fab && fab.querySelector('.fab__top');
   if (topBtn) {
     topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
-    let pending = false;
+    const wide = matchMedia('(min-width: 1024px)');
+    let pending = false, lastY = scrollY, show = false;
     const sync = () => {
       pending = false;
-      const max = document.documentElement.scrollHeight - innerHeight;
-      topBtn.style.setProperty('--p', (max > 0 ? Math.min(1, scrollY / max) : 0).toFixed(4));
-      fab.classList.toggle('show-top', scrollY > innerHeight * .8);
+      const y = scrollY, dy = y - lastY, max = document.documentElement.scrollHeight - innerHeight;
+      topBtn.style.setProperty('--p', (max > 0 ? Math.min(1, y / max) : 0).toFixed(4));
+      if (y <= innerHeight * .8) show = false;
+      else if (wide.matches || y >= max - 120) show = true;
+      else if (dy > 4) show = false;
+      else if (dy < -4) show = true;
+      if (Math.abs(dy) > 4 || y <= innerHeight * .8) lastY = y;
+      fab.classList.toggle('show-top', show);
     };
     addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(sync); } }, { passive: true });
     sync();
