@@ -139,6 +139,74 @@
     }
   }
 
+  // ---- Cụm hỗ trợ bên phải: mở/đóng (điện thoại), nút lên đầu trang có vòng tiến độ
+  const fab = document.querySelector('[data-fab]');
+  if (fab) {
+    const toggle = fab.querySelector('.fab__toggle');
+    const topBtn = fab.querySelector('.fab__top');
+    const setOpen = on => {
+      fab.classList.toggle('is-open', on);
+      toggle.setAttribute('aria-expanded', String(on));
+      toggle.setAttribute('aria-label', on ? 'Đóng hỗ trợ' : 'Mở hỗ trợ: Zalo, Messenger, gọi điện');
+    };
+    toggle.addEventListener('click', () => setOpen(!fab.classList.contains('is-open')));
+    // Bấm ra ngoài (kể cả lớp nền mờ của chính cụm) thì đóng
+    document.addEventListener('click', e => {
+      if (fab.classList.contains('is-open') && (e.target === fab || !fab.contains(e.target))) setOpen(false);
+    });
+    addEventListener('keydown', e => {
+      if (e.key === 'Escape' && fab.classList.contains('is-open')) { setOpen(false); toggle.focus(); }
+    });
+    fab.querySelectorAll('.fab__btn').forEach(a => a.addEventListener('click', () => setOpen(false)));
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
+    let pending = false;
+    const sync = () => {
+      pending = false;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      topBtn.style.setProperty('--p', (max > 0 ? Math.min(1, scrollY / max) : 0).toFixed(4));
+      fab.classList.toggle('show-top', scrollY > innerHeight * .8);
+    };
+    addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(sync); } }, { passive: true });
+    sync();
+  }
+
+  // ---- Máy tính không gọi điện được: bấm số thì sao chép số và báo nhỏ
+  const toast = document.querySelector('.toast');
+  let toastTimer;
+  const say = msg => {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-on'), 2800);
+  };
+  const legacyCopy = text => {
+    const t = document.createElement('textarea');
+    t.value = text; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.append(t); t.select();
+    let done = false;
+    try { done = document.execCommand('copy'); } catch (_) {}
+    t.remove();
+    return done ? Promise.resolve() : Promise.reject();
+  };
+  const copyText = text => (navigator.clipboard && window.isSecureContext
+    ? navigator.clipboard.writeText(text).catch(() => legacyCopy(text))
+    : legacyCopy(text));
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('a[href^="tel:"]').forEach(a => a.addEventListener('click', e => {
+      const digits = a.getAttribute('href').slice(4);
+      const shown = digits.replace(/^(\d{4})(\d{3})(\d{3})$/, '$1 $2 $3');
+      e.preventDefault();
+      const box = a.closest('dialog');
+      const report = msg => { if (box && box.open) box.close(); say(msg); };
+      // Sao chép không được thì vẫn hiện số để khách đọc
+      copyText(digits).then(
+        () => report(`Đã sao chép số ${shown} · gọi hoặc nhắn Zalo từ điện thoại`),
+        () => report(`Số điện thoại: ${shown} · gọi hoặc nhắn Zalo từ điện thoại`)
+      );
+    }));
+  }
+
   // ---- iOS chỉ áp trạng thái :active (bấm giữ) khi trang có lắng nghe chạm
   document.addEventListener('touchstart', () => {}, { passive: true });
 
