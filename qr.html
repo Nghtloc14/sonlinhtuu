@@ -26,7 +26,7 @@
 <link rel="preload" as="image" href="assets/img/chum-sam-doc.webp">
 <script>(function(){var d=document.documentElement,s=location.search;d.classList.add('js');var mau=/[?&]loader=/.test(s),qr=mau||/\/qr(\.html)?\/?$/.test(location.pathname);if(!qr)return;var da=false;try{da=sessionStorage.getItem('slt-cho')==='1';sessionStorage.setItem('slt-cho','1')}catch(e){}if(mau||!da)d.classList.add('cho-dang')})();</script>
 <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-<link rel="stylesheet" href="assets/css/style.css?v=23">
+<link rel="stylesheet" href="assets/css/style.css?v=24">
 <link rel="stylesheet" href="assets/css/cho.css?v=3">
 <!-- ĐẾM LƯỢT XEM: dán mã Cloudflare Web Analytics vào đây khi có tài khoản. /qr = lượt quét tem chai, / = lượt vào từ link. -->
 <script type="application/ld+json">
@@ -362,9 +362,18 @@
     <li><a class="fab__btn" href="https://m.me/vinh.son.908" target="_blank" rel="noopener"><span class="fab__tip"><span class="fab__long">Nhắn </span>Messenger</span><span class="fab__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.2c-5 0-8.8 3.6-8.8 8.3 0 2.5 1.1 4.7 2.9 6.2v3.1l2.8-1.6c1 .3 2 .4 3.1.4 5 0 8.8-3.6 8.8-8.1S17 3.2 12 3.2z"/><path d="m7.6 13.6 3-3.2 2.1 2 3.7-2.7-3 3.2-2.1-2z"/></svg></span></a></li>
     <li><a class="fab__btn fab__btn--call" href="tel:0978404779" data-copy="0978 404 779"><span class="fab__tip">Gọi<span class="fab__long"> 0978 404 779</span></span><span class="fab__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4-2 1.3a11 11 0 0 0 7.1 7.1l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg></span></a></li>
   </ul>
+  <!-- Chum rượu: rượu trong chum dâng theo đoạn đã đọc, mũi tên như hơi rượu bốc lên -->
   <button class="fab__top" type="button" aria-label="Lên đầu trang">
-    <svg class="fab__ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22"/><circle class="fab__ring-p" cx="24" cy="24" r="22"/></svg>
-    <svg class="fab__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6.5 11.5 12 6l5.5 5.5"/></svg>
+    <svg class="fab__chum" viewBox="0 0 30 30" aria-hidden="true">
+      <defs>
+        <clipPath id="fab-long"><path d="M11.6 12.4H18.4Q18.6 13.6 20 14.2Q24.6 15.8 24.6 18.8Q24.6 22.6 21 26.2Q20.4 27 19.4 27H10.6Q9.6 27 9 26.2Q5.4 22.6 5.4 18.8Q5.4 15.8 10 14.2Q11.4 13.6 11.6 12.4Z"/></clipPath>
+        <linearGradient id="fab-ruou" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E6B6"/><stop offset=".45" stop-color="#DDB96F"/><stop offset="1" stop-color="#A77E3E"/></linearGradient>
+      </defs>
+      <g clip-path="url(#fab-long)"><g class="fab__muc"><path class="fab__song" fill="url(#fab-ruou)" d="M-4 0Q-1.5-1.3 1 0T6 0T11 0T16 0T21 0T26 0T31 0T36 0T41 0V20H-4Z"/></g></g>
+      <path class="fab__vo" d="M11.6 12.4H18.4Q18.6 13.6 20 14.2Q24.6 15.8 24.6 18.8Q24.6 22.6 21 26.2Q20.4 27 19.4 27H10.6Q9.6 27 9 26.2Q5.4 22.6 5.4 18.8Q5.4 15.8 10 14.2Q11.4 13.6 11.6 12.4Z"/>
+      <path class="fab__mieng" d="M10.4 11.4H19.6"/>
+      <path class="fab__len" d="M10.9 6.9 15 2.8l4.1 4.1"/>
+    </svg>
   </button>
 </div>
 
@@ -392,6 +401,6 @@
   <div class="viewer__pages"></div>
 </dialog>
 
-<script src="assets/js/main.js?v=16" defer></script>
+<script src="assets/js/main.js?v=17" defer></script>
 </body>
 </html>

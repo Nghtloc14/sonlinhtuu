@@ -112,55 +112,79 @@
     document.querySelectorAll('main > section[id]').forEach(s => spy.observe(s));
   }
 
-  // ---- Quy trình cuộn dọc: vạch vàng chạy theo vị trí đọc, bước ở giữa màn hình sáng lên, bước khác dịu xuống
+  // ---- Quy trình cuộn dọc: đầu vạch vàng nằm ở một đường ngang cố định trên màn hình (vùng mắt đọc).
+  // Vạch chạm hình thoi của bước nào thì hình thoi đó tô vàng, xoay nửa vòng, và bước đó sáng lên; bước khác dịu xuống.
+  // Tính theo vị trí cuộn trong cùng khung hình với vạch vàng, nên không sáng sớm, không trễ, không nhảy qua lại.
   const stepList = document.getElementById('cac-buoc');
   if (stepList) {
     const items = [...stepList.children];
-    items[0].classList.add('is-active'); // có sẵn một bước sáng, không bao giờ dịu cả 4
-    let queued = false;
+    const marks = items.map(el => el.querySelector('.step__n'));
+    const topBar = document.querySelector('.top'), bottomBar = document.querySelector('.bar');
+    const reached = items.map(() => false);
+    let queued = false, active = -1;
     const trace = () => {
       queued = false;
       const r = stepList.getBoundingClientRect();
-      const p = (innerHeight * .55 - r.top) / r.height;
-      stepList.style.setProperty('--p', Math.min(1, Math.max(0, p)).toFixed(4));
+      const line = getComputedStyle(stepList, '::after');
+      const lineTop = r.top + (parseFloat(line.top) || 0), lineH = r.height - (parseFloat(line.top) || 0) - (parseFloat(line.bottom) || 0);
+      const tH = topBar ? topBar.offsetHeight : 0, bH = bottomBar ? bottomBar.offsetHeight : 0;
+      const centers = marks.map(m => { const b = m.getBoundingClientRect(); return b.top + b.height / 2; });
+      // Hình thoi ở đầu bước (điện thoại): chạm khi tên bước lên tới 45% vùng nhìn; hình thoi giữa bước (máy tính): 50%
+      const i0 = items[0].getBoundingClientRect();
+      const k = (centers[0] - i0.top) / i0.height > .3 ? .5 : .45;
+      const F = tH + (innerHeight - tH - bH) * k;
+      stepList.style.setProperty('--p', Math.min(1, Math.max(0, (F - lineTop) / lineH)).toFixed(4));
+      let last = -1;
+      centers.forEach((c, i) => {
+        if (!reached[i] && c <= F) reached[i] = true;
+        else if (reached[i] && c > F + 16) reached[i] = false; // đệm 16px (nằm dưới hình thoi) để đứng ở ranh giới không chớp
+        items[i].classList.toggle('is-qua', reached[i]);
+        if (reached[i]) last = i;
+      });
+      const now = Math.max(0, last); // chưa tới bước nào thì bước 1 sáng sẵn, không bao giờ dịu cả 4
+      if (now !== active) { active = now; items.forEach((el, i) => el.classList.toggle('is-active', i === now)); }
+      stepList.classList.toggle('is-live', r.top < innerHeight * .7 && r.bottom > innerHeight * .3);
     };
     addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(trace); } }, { passive: true });
     addEventListener('resize', trace);
+    addEventListener('load', trace);
     trace();
-    if ('IntersectionObserver' in window) {
-      const focus = new IntersectionObserver(entries => {
-        for (const e of entries) {
-          if (e.isIntersecting) items.forEach(el => el.classList.toggle('is-active', el === e.target));
-        }
-      }, { rootMargin: '-42% 0px -42% 0px' });
-      items.forEach(el => focus.observe(el));
-      // Chỉ làm dịu các bước khác khi phần quy trình đang chiếm giữa màn hình
-      new IntersectionObserver(([e]) => stepList.classList.toggle('is-live', e.isIntersecting), { rootMargin: '-30% 0px -30% 0px' }).observe(stepList);
-    }
   }
 
-  // ---- Nút lên đầu trang: hiện khi đã qua màn hình đầu, vòng vàng theo tiến độ đọc.
-  // Điện thoại, máy tính bảng (nội dung tràn hết bề ngang): đang cuộn xuống đọc thì ẩn để không che chữ,
-  // cuộn ngược lên hoặc tới cuối trang thì hiện. Máy tính đã chừa lề nên luôn hiện.
+  // ---- Nút lên đầu trang (chum rượu): rượu trong chum dâng theo đoạn đã đọc.
+  // Hiện khi đã cuộn qua phần lớn đầu trang, chỉ ẩn khi quay về gần đầu trang — không ẩn/hiện theo hướng vuốt
+  // (vuốt trên điện thoại luôn có những nhịp giật ngược rất nhỏ làm nút chớp). Ngưỡng tính theo đầu trang, có khoảng đệm,
+  // nên thanh địa chỉ điện thoại co giãn cũng không làm nút chớp.
   const fab = document.querySelector('[data-fab]');
   const topBtn = fab && fab.querySelector('.fab__top');
   if (topBtn) {
-    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
-    const wide = matchMedia('(min-width: 1024px)');
-    let pending = false, lastY = scrollY, show = false;
+    topBtn.addEventListener('click', () => {
+      topBtn.classList.remove('is-bay'); void topBtn.offsetWidth; topBtn.classList.add('is-bay');
+      setTimeout(() => topBtn.classList.remove('is-bay'), 800);
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+    const heroEl = document.querySelector('.hero');
+    let pending = false, show = false;
     const sync = () => {
       pending = false;
-      const y = scrollY, dy = y - lastY, max = document.documentElement.scrollHeight - innerHeight;
-      topBtn.style.setProperty('--p', (max > 0 ? Math.min(1, y / max) : 0).toFixed(4));
-      if (y <= innerHeight * .8) show = false;
-      else if (wide.matches || y >= max - 120) show = true;
-      else if (dy > 4) show = false;
-      else if (dy < -4) show = true;
-      if (Math.abs(dy) > 4 || y <= innerHeight * .8) lastY = y;
+      const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+      const edge = heroEl ? heroEl.offsetTop + heroEl.offsetHeight * .75 : 600;
+      topBtn.style.setProperty('--p', (max > 0 ? Math.min(1, y / max) : 0).toFixed(3));
+      if (!show && y > edge) show = true;
+      else if (show && y < edge - 160) show = false;
       fab.classList.toggle('show-top', show);
     };
     addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(sync); } }, { passive: true });
+    addEventListener('resize', sync);
     sync();
+  }
+
+  // ---- Giấy tờ chính thức: phần giấy tờ lên giữa màn hình thì hai tờ giấy bắt đầu rung nhẹ mời bấm xem.
+  // Bắt đầu khi đã vào giữa màn hình (không chạy lúc còn sát mép), chỉ dừng khi cuộn hẳn ra khỏi màn hình (không chớp ở ranh giới).
+  const docList = document.querySelector('.docs');
+  if (docList && !reduce && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) docList.classList.add('is-moi'); }, { rootMargin: '-15% 0px -30% 0px' }).observe(docList);
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting) docList.classList.remove('is-moi'); }).observe(docList);
   }
 
   // ---- Máy tính không gọi điện được: bấm số thì sao chép số và báo nhỏ
@@ -202,6 +226,21 @@
 
   // ---- iOS chỉ áp trạng thái :active (bấm giữ) khi trang có lắng nghe chạm
   document.addEventListener('touchstart', () => {}, { passive: true });
+
+  // ---- Tiêu đề phần: hình thoi xoay vào, nét vàng vẽ ra khi tiêu đề lên tới khoảng 3/4 màn hình (lúc còn sát mép dưới thì chưa chạy)
+  const orns = [...document.querySelectorAll('.head .orn')];
+  if (reduce || !('IntersectionObserver' in window)) {
+    orns.forEach(o => o.closest('.head').classList.add('is-ve'));
+  } else {
+    const ve = new IntersectionObserver(entries => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.closest('.head').classList.add('is-ve');
+        ve.unobserve(e.target);
+      }
+    }, { rootMargin: '0px 0px -25% 0px' });
+    orns.forEach(o => ve.observe(o));
+  }
 
   // ---- Hiện dần khi cuộn tới; nhóm (4 bước, 3 ảnh, 2 giấy) hiện lần lượt
   const groups = ['.head', '.diem-list > .diem', '.about__lead', '.place', '.step__head', '.gallery > figure', '.docs > .doc', '.docs__note', '.contact__lead', '.contact__actions', '.foot__in > div'];
