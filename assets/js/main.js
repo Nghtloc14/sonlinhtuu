@@ -2,6 +2,13 @@
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ---- Viền chọn chỉ cho người dùng bàn phím: phím điều hướng thì bật, chạm/bấm chuột thì tắt
+  const root = document.documentElement;
+  addEventListener('keydown', e => {
+    if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || e.key === 'Escape' || e.key.startsWith('Arrow')) root.classList.add('kb');
+  }, true);
+  addEventListener('pointerdown', () => root.classList.remove('kb'), true);
+
   // ---- Video = ảnh động: tắt tiếng, lặp, không nút. Tải khi gần tới, chạy khi thấy, khuất thì dừng.
   // Không phát được (tiết kiệm pin, giảm chuyển động) → giữ ảnh bìa.
   const vids = [...document.querySelectorAll('video[data-src]')];
@@ -48,7 +55,7 @@
   const giveBack = d => {
     const el = openers.get(d);
     openers.delete(d);
-    if (el && document.contains(el)) el.focus();
+    if (el && document.contains(el)) el.focus({ preventScroll: true });
   };
   document.querySelectorAll('dialog').forEach(d => {
     // Trả focus ngay khi bấm đóng, không chờ sự kiện "close" (có trình duyệt nhúng không phát sự kiện này)

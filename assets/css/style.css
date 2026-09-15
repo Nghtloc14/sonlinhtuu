@@ -35,7 +35,10 @@ img, video, svg { display: block; max-width: 100%; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
 p { text-wrap: pretty; }
-:focus-visible { outline: 2px solid var(--vang-sang); outline-offset: 3px; }
+:focus { outline: none; }
+/* Viền chọn chỉ hiện khi dùng bàn phím (lớp .kb do JS gắn). Safari/Chrome iPhone, Zalo coi focus do trang tự đặt
+   (mở hộp thoại, đóng hộp trả về nút) là focus-visible nên hiện khung vàng khi chạm — không để vậy nữa. */
+.kb :focus-visible { outline: 2px solid var(--vang-sang); outline-offset: 3px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .skip { position: absolute; left: 12px; top: -60px; z-index: 60; padding: 10px 14px; background: var(--kem); color: var(--rung); font-weight: 600; }
 .skip:focus { top: 12px; }
