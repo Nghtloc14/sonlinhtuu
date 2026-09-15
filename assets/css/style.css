@@ -785,23 +785,16 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 }
 .fab__top::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; } /* vùng chạm rộng hơn nút */
 .fab.show-top .fab__top { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
-/* Chum rượu sâm: củ sâm bồng bềnh trong chum, rượu dâng theo đoạn đã đọc (--p), mặt rượu gợn nhẹ, mũi tên bốc lên như hơi rượu */
+/* Chum rượu: rượu dâng theo đoạn đã đọc (--p), mặt rượu gợn nhẹ, mũi tên bốc lên như hơi rượu */
 .fab__chum { width: 32px; height: 32px; overflow: visible; transition: transform .25s ease; }
 .fab__vo { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
 .fab__mieng { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
 .fab__muc { transform: translateY(calc(25.5px - 10.5px * var(--p, 0))); transition: transform .6s cubic-bezier(.2,.7,.2,1); }
 .fab__song { animation: fab-song 2.8s linear infinite; }
 .fab__len { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; animation: fab-hoi 2.4s ease-in-out infinite; }
-.fab__sam { transform-box: fill-box; transform-origin: 50% 35%; animation: fab-sam 3.6s ease-in-out infinite; }
-.fab__sam-than { fill: #F7EBCB; stroke: #6E4520; stroke-width: .6; stroke-linejoin: round; }
-.fab__sam-re { fill: none; stroke: #6E4520; stroke-width: .6; stroke-linecap: round; }
-.fab__sam-la { fill: #7FA35A; }
-.fab__top.is-bay .fab__sam { animation: fab-sam-nay .75s cubic-bezier(.2,.7,.2,1); }
 .fab__top:active .fab__chum { transform: scale(.9); }
 .fab__top.is-bay .fab__len { animation: fab-vut .75s cubic-bezier(.2,.7,.2,1); }
 @keyframes fab-song { to { transform: translateX(-10px); } }
-@keyframes fab-sam { 0%, 100% { transform: translateY(.3px) rotate(-3deg); } 50% { transform: translateY(-.5px) rotate(3deg); } } /* củ sâm bồng bềnh trong rượu */
-@keyframes fab-sam-nay { 0%, 100% { transform: none; } 35% { transform: translateY(-2.2px) rotate(-5deg); } 65% { transform: translateY(.4px) rotate(3deg); } }
 @keyframes fab-hoi { 0%, 100% { transform: translateY(1px); opacity: .7; } 50% { transform: translateY(-1.5px); opacity: 1; } }
 @keyframes fab-vut { 0% { transform: none; opacity: 1; } 40% { transform: translateY(-8px); opacity: 0; } 41% { transform: translateY(4px); opacity: 0; } 100% { transform: none; opacity: 1; } }
 
