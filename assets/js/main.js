@@ -102,18 +102,28 @@
     }
   };
   const viewer = document.getElementById('xem-giay');
-  document.querySelectorAll('[data-doc]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const doc = DOCS[btn.dataset.doc];
-      if (!doc || !viewer) return;
-      viewer.querySelector('h2').textContent = doc.title;
-      const box = viewer.querySelector('.viewer__pages');
-      box.replaceChildren(...doc.pages.map(([src, alt]) => {
-        const img = new Image(1100, 1557);
-        img.src = src; img.alt = alt; img.decoding = 'async';
-        return img;
-      }));
-      if (open(viewer, btn)) viewer.scrollTop = 0;
+  const showDoc = btn => {
+    const doc = DOCS[btn.dataset.doc];
+    if (!doc || !viewer) return;
+    viewer.querySelector('h2').textContent = doc.title;
+    const box = viewer.querySelector('.viewer__pages');
+    box.replaceChildren(...doc.pages.map(([src, alt]) => {
+      const img = new Image(1100, 1557);
+      img.src = src; img.alt = alt; img.decoding = 'async';
+      return img;
+    }));
+    if (open(viewer, btn)) viewer.scrollTop = 0;
+  };
+  document.querySelectorAll('[data-doc]').forEach(btn => btn.addEventListener('click', () => showDoc(btn)));
+  // Chạm, bấm vào bất kỳ chỗ nào trên thẻ giấy tờ (tên, số hiệu, nơi cấp, khoảng trống) cũng mở bản giấy — không phải nhắm đúng ảnh hay nút.
+  // Bàn phím vẫn dùng hai nút có sẵn. Vuốt qua thẻ để cuộn thì trình duyệt không phát "click" nên không mở nhầm.
+  document.querySelectorAll('.docs > .doc').forEach(card => {
+    const btn = card.querySelector('[data-doc]');
+    if (!btn) return;
+    card.addEventListener('click', e => {
+      if (e.target.closest('button, a')) return; // nút trong thẻ đã tự mở
+      if (String(getSelection && getSelection()).trim()) return; // đang bôi đen chữ để sao chép số hiệu thì không mở
+      showDoc(btn);
     });
   });
 
