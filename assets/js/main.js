@@ -10,7 +10,7 @@
   addEventListener('pointerdown', () => root.classList.remove('kb'), true);
 
   // ---- Video = ảnh động: tắt tiếng, lặp, không nút. Tải khi gần tới, chạy khi thấy, khuất thì dừng.
-  // Không phát được (tiết kiệm pin, giảm chuyển động) → giữ ảnh bìa.
+  // Máy bật Giảm chuyển động → giữ ảnh bìa. Máy chặn tự phát → giữ ảnh bìa tới lần chạm kế tiếp.
   const vids = [...document.querySelectorAll('video[data-src]')];
   vids.forEach(v => {
     v.muted = true;
@@ -29,15 +29,33 @@
         load.unobserve(e.target);
       }
     }, { rootMargin: '600px 0px' });
+    // Máy chặn tự phát (iPhone bật Chế độ nguồn điện thấp, trình duyệt trong Zalo/Facebook): phát ngay lần chạm, vuốt, bấm kế tiếp
+    const seen = new Set(), blocked = new Set();
+    const tryPlay = v => {
+      const p = v.play();
+      if (p) p.then(() => blocked.delete(v), () => { if (v.paused) blocked.add(v); });
+    };
+    // Trong lần chạm: video đang thấy thì phát; video đã tải sẵn phía dưới thì phát rồi dừng ngay để máy cho phép (tới nơi tự chạy)
+    const retry = () => {
+      vids.forEach(v => {
+        if (seen.has(v)) { if (blocked.has(v)) tryPlay(v); return; }
+        if (!blocked.size || v.dataset.mo || !v.getAttribute('src')) return;
+        const p = v.play();
+        if (p) p.then(() => { v.dataset.mo = '1'; if (!seen.has(v)) v.pause(); }, () => {});
+      });
+    };
+    vids.forEach(v => v.addEventListener('playing', () => { v.dataset.mo = '1'; }));
+    ['touchend', 'click', 'keydown'].forEach(t => addEventListener(t, retry, { capture: true, passive: true }));
     const run = new IntersectionObserver(entries => {
       for (const e of entries) {
         const v = e.target;
         if (e.isIntersecting) {
+          seen.add(v);
           setSrc(v);
-          const p = v.play();
-          if (p) p.catch(() => {});
-        } else if (!v.paused) {
-          v.pause();
+          tryPlay(v);
+        } else {
+          seen.delete(v);
+          if (!v.paused) v.pause();
         }
       }
     }, { threshold: 0.15 });
