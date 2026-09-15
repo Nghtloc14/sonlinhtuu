@@ -179,12 +179,75 @@
     sync();
   }
 
-  // ---- Giấy tờ chính thức: phần giấy tờ lên giữa màn hình thì hai tờ giấy bắt đầu rung nhẹ mời bấm xem.
-  // Bắt đầu khi đã vào giữa màn hình (không chạy lúc còn sát mép), chỉ dừng khi cuộn hẳn ra khỏi màn hình (không chớp ở ranh giới).
-  const docList = document.querySelector('.docs');
-  if (docList && !reduce && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => { if (e.isIntersecting) docList.classList.add('is-moi'); }, { rootMargin: '-15% 0px -30% 0px' }).observe(docList);
-    new IntersectionObserver(([e]) => { if (!e.isIntersecting) docList.classList.remove('is-moi'); }).observe(docList);
+  // ---- Giấy tờ chính thức: tờ giấy phản hồi theo cú cuộn như giấy thật (lò xo + ma sát): cuộn mạnh lắc mạnh, cuộn nhẹ lắc nhẹ.
+  // Cuộn xuống tới vừa tầm mắt thì rung chào kèm một nhịp sáng; đứng yên xem một lúc thì nhắc nhẹ; rê chuột vào thì lắc nhẹ đáp lại rồi lắng.
+  // Mỗi lúc chỉ một tờ rung: tờ đang rung lắng hẳn rồi nghỉ thêm 2,5 giây thì tờ kia mới được rung (không rung cùng lúc, không rung nối đuôi).
+  const docCards = [...document.querySelectorAll('.docs > .doc')];
+  if (docCards.length && !reduce) {
+    const papers = docCards.map((card, i) => ({ card, el: card.querySelector('.doc__paper'), dir: i % 2 ? 1 : -1, a: 0, v: 0, c: 2, armed: true, hover: false, last: 0, t: 0 }));
+    const K = .18, C = .12, MAX = 5, GAP = 2500; // độ cứng lò xo, ma sát, góc lắc tối đa (độ), khoảng nghỉ giữa hai tờ (ms)
+    let running = false, lastY = scrollY, lastDy = 0, idle = 0, owner = null, freeAt = 0;
+    const flash = p => {
+      p.card.classList.remove('is-loe'); void p.card.offsetWidth; p.card.classList.add('is-loe');
+      clearTimeout(p.t); p.t = setTimeout(() => p.card.classList.remove('is-loe'), 1600);
+    };
+    const free = p => owner === p || (!owner && performance.now() >= freeAt); // tờ này có được rung lúc này không
+    const push = (p, force) => { owner = p; p.last = performance.now(); p.v += p.dir * force; wake(); };
+    const where = p => { const r = p.el.getBoundingClientRect(); return (r.top + r.height / 2) / innerHeight; }; // 0 = mép trên, 1 = mép dưới
+    const tick = () => {
+      const y = scrollY, dy = Math.max(-90, Math.min(90, y - lastY));
+      lastY = y;
+      // Lực cuộn chỉ tác động lên tờ gần giữa màn hình nhất
+      let near = null, nw = 0;
+      for (const p of papers) {
+        p.c = where(p);
+        if (p.c < -.3 || p.c > 1.3) p.armed = true; // ra hẳn khỏi màn hình thì lần sau cuộn tới lại rung chào
+        const w = p.c > .1 && p.c < .9 ? 1 - Math.abs(p.c - .5) * 1.4 : 0; // chỉ khi giấy đã vào trong màn hình, mạnh nhất ở giữa
+        if (w > nw && !p.hover) { near = p; nw = w; }
+      }
+      if (near && dy) {
+        const f = nw * (dy * .008 + (dy - lastDy) * .08);
+        if (Math.abs(f) > .01 && free(near)) push(near, f);
+      }
+      for (const p of papers) {
+        if (p.armed && dy > 0 && p.c > .2 && p.c < .7) { p.armed = false; p.want = true; } // cuộn xuống tới vừa tầm mắt: xếp lượt rung chào
+        if (p.want && (p.c < .1 || p.c > .9)) p.want = false; // tờ kia rung lâu quá, tờ này đã ra khỏi màn hình thì thôi
+        if (p.want && free(p)) { p.want = false; push(p, 2.4); flash(p); }
+      }
+      let moving = false;
+      for (const p of papers) {
+        p.v += -K * p.a - C * p.v;
+        p.a = Math.max(-MAX, Math.min(MAX, p.a + p.v));
+        if (Math.abs(p.a) > .02 || Math.abs(p.v) > .02) moving = true;
+        if (p === owner) p.peak = Math.max(p.peak || 0, Math.abs(p.a));
+        p.el.style.rotate = p.a.toFixed(2) + 'deg';
+        p.el.style.translate = '0 ' + (-Math.abs(p.a) * .7).toFixed(1) + 'px';
+      }
+      if (owner && !moving) { freeAt = performance.now() + (owner.peak > 1.2 ? GAP : 0); owner.peak = 0; owner = null; } // lắc khẽ thì không bắt tờ kia chờ
+      lastDy = dy;
+      if (moving || dy) requestAnimationFrame(tick);
+      else {
+        running = false;
+        papers.forEach(p => { p.a = p.v = 0; p.el.style.rotate = p.el.style.translate = ''; });
+        if (papers.some(p => p.want)) setTimeout(wake, Math.max(0, freeAt - performance.now()) + 30); // tới lượt thì rung chào tờ đang chờ
+      }
+    };
+    // lastY giữ vị trí của khung hình trước (không đặt lại khi đánh thức), để khung đầu tiên của cú cuộn vẫn đo được lực cuộn
+    const wake = () => { if (!running) { running = true; lastDy = 0; requestAnimationFrame(tick); } };
+    // Đứng yên 4 giây mà có tờ giấy ở giữa màn hình thì nhắc nhẹ tờ lâu chưa rung nhất, rồi cứ 7 giây một lần
+    const nudge = () => {
+      const seen = papers.filter(p => { const c = where(p); return c > .1 && c < .9 && !p.hover; }).sort((x, z) => x.last - z.last);
+      if (seen.length && free(seen[0])) { push(seen[0], 1.7); flash(seen[0]); }
+      idle = setTimeout(nudge, seen.length ? 7000 : 4000);
+    };
+    const rest = () => { clearTimeout(idle); idle = setTimeout(nudge, 4000); };
+    addEventListener('scroll', () => { wake(); rest(); }, { passive: true });
+    rest();
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) papers.forEach(p => {
+      // Rê chuột là người xem chủ động: đáp lại ngay (không chờ khoảng nghỉ), trừ khi tờ kia đang rung dở
+      p.card.addEventListener('pointerenter', () => { p.hover = true; rest(); if (!owner || owner === p) push(p, 1); });
+      p.card.addEventListener('pointerleave', () => { p.hover = false; });
+    });
   }
 
   // ---- Máy tính không gọi điện được: bấm số thì sao chép số và báo nhỏ
