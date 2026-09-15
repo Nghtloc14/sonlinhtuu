@@ -130,13 +130,13 @@ p { text-wrap: pretty; }
 .arch__in img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; animation: keo 16s ease-in-out infinite alternate; }
 @keyframes keo { from { transform: scale(1.1); } to { transform: scale(1.18) translateY(-1.5%); } } /* luôn phóng ≥10% để dịch theo chuột (±5px) không lộ mép */
 
-/* Núi: 3 lớp đổ bóng mềm, không viền. Đường cong kéo giãn theo bề ngang vẫn tự nhiên, không bị cắt ở màn rộng */
+/* Núi: 2 lớp đổ bóng mềm, không viền. Đường cong kéo giãn theo bề ngang vẫn tự nhiên, không bị cắt ở màn rộng */
 .mtn { position: absolute; left: 0; width: 100%; pointer-events: none; }
+/* Chân đầu trang: phủ mờ dần về màu phần kế tiếp, núi trôi khi cuộn cũng không lộ đường nối */
+.hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; height: clamp(32px, 6vh, 64px); background: linear-gradient(180deg, rgba(14,37,25,0), var(--rung)); pointer-events: none; }
 .hero .mtn { z-index: 0; will-change: transform; }
 .mtn--back { bottom: var(--marks-h); height: var(--nui); }
 .mtn--mid { bottom: var(--marks-h); height: calc(var(--nui) * .69); }
-.mtn--front { bottom: calc(var(--marks-h) - 1px); height: calc(var(--nui) * .41); z-index: 2 !important; }
-.mtn__fill-front { fill: var(--rung); }
 
 
 /* ---------- Khung chung các phần ---------- */
@@ -171,7 +171,7 @@ p { text-wrap: pretty; }
 }
 
 /* ---------- Ba điểm nhấn: khung vòm chạy video, số viền vàng, tiêu đề hai màu ---------- */
-.diem-sec { padding-top: 52px; border-bottom: 1px solid rgba(216,180,107,.16); background: radial-gradient(90% 40% at 50% 0%, rgba(216,180,107,.09), transparent 70%), linear-gradient(180deg, var(--rung), var(--rung-2)); }
+.diem-sec { padding-top: 52px; border-bottom: 1px solid rgba(216,180,107,.16); background: radial-gradient(70% 30% at 50% 22%, rgba(216,180,107,.08), transparent 70%), linear-gradient(180deg, var(--rung), var(--rung-2)); } /* quầng sáng nằm sau tiêu đề, mép trên đúng màu chân đầu trang nên không lộ đường nối */
 .diem-list { display: grid; gap: 40px; max-width: 520px; margin: 0 auto; }
 .diem { display: grid; grid-template-columns: 43% 1fr; gap: 22px; align-items: center; }
 .diem:nth-child(even) { grid-template-columns: 1fr 43%; }
