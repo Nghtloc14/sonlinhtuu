@@ -139,6 +139,51 @@
     }
   }
 
+  // ---- Điện thoại: thanh "Đang xem" — hiện khi qua đầu trang, đổi tên khi sang phần mới, bấm mở mục lục
+  const mnav = document.querySelector('[data-mnav]');
+  if (mnav) {
+    const bar = mnav.querySelector('.mnav__bar');
+    const nameEl = mnav.querySelector('[data-mnav-name]');
+    const idxEl = mnav.querySelector('[data-mnav-idx]');
+    const items = [...mnav.querySelectorAll('.mnav__list a')];
+    const setOpen = on => { mnav.classList.toggle('is-open', on); bar.setAttribute('aria-expanded', String(on)); };
+    bar.addEventListener('click', () => setOpen(!mnav.classList.contains('is-open')));
+    items.forEach(a => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('click', e => { if (mnav.classList.contains('is-open') && !mnav.contains(e.target)) setOpen(false); });
+    let current = -1;
+    const show = i => {
+      if (i === current || i < 0) return;
+      current = i;
+      items.forEach((a, k) => a.classList.toggle('is-here', k === i));
+      nameEl.textContent = items[i].dataset.name;
+      idxEl.textContent = `0${i + 1} / 0${items.length}`;
+      nameEl.classList.remove('is-swap');
+      void nameEl.offsetWidth; // chạy lại hiệu ứng đổi tên
+      nameEl.classList.add('is-swap');
+    };
+    show(0);
+    if ('IntersectionObserver' in window) {
+      const byId = new Map(items.map((a, k) => [a.getAttribute('href').slice(1), k]));
+      const spy = new IntersectionObserver(entries => {
+        for (const e of entries) if (e.isIntersecting) show(byId.get(e.target.id));
+      }, { rootMargin: '-35% 0px -60% 0px' });
+      byId.forEach((_, id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
+      const heroEl = document.querySelector('.hero');
+      if (heroEl) new IntersectionObserver(([e]) => {
+        mnav.classList.toggle('is-on', !e.isIntersecting);
+        if (e.isIntersecting) setOpen(false);
+      }, { rootMargin: '-64px 0px 0px 0px' }).observe(heroEl);
+    }
+    let waiting = false;
+    const prog = () => {
+      waiting = false;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      mnav.style.setProperty('--doc', (max > 0 ? Math.min(1, scrollY / max) : 0).toFixed(4));
+    };
+    addEventListener('scroll', () => { if (!waiting) { waiting = true; requestAnimationFrame(prog); } }, { passive: true });
+    prog();
+  }
+
   // ---- Cụm hỗ trợ bên phải: mở/đóng (điện thoại), nút lên đầu trang có vòng tiến độ
   const fab = document.querySelector('[data-fab]');
   if (fab) {
@@ -165,6 +210,7 @@
       const max = document.documentElement.scrollHeight - innerHeight;
       topBtn.style.setProperty('--p', (max > 0 ? Math.min(1, scrollY / max) : 0).toFixed(4));
       fab.classList.toggle('show-top', scrollY > innerHeight * .8);
+      fab.classList.toggle('show-fab', scrollY > innerHeight * .35);
     };
     addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(sync); } }, { passive: true });
     sync();
