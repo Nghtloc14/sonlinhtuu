@@ -181,20 +181,25 @@
 
   // ---- Giấy tờ chính thức: tờ giấy phản hồi theo cú cuộn như giấy thật (lò xo + ma sát): cuộn mạnh lắc mạnh, cuộn nhẹ lắc nhẹ.
   // Cuộn tới vừa tầm mắt, tay vừa dừng vuốt (lúc mắt đang nhìn) thì tờ giấy nhấc lên rung chào ~2 giây kèm một nhịp sáng.
-  // Đứng yên xem một lúc thì nhắc nhẹ. Rê chuột vào tờ nào tờ đó lắc đáp lại ngay (tờ đang lắc dở thì lắng nhanh nhường lượt).
-  // Mỗi lúc chỉ một tờ rung: tờ đang rung lắng hẳn rồi nghỉ thêm 2,5 giây thì tờ kia mới tự rung.
+  // Đứng yên xem một lúc thì nhắc nhẹ. Rê chuột (máy tính) hay chạm ngón tay (điện thoại) vào tờ nào tờ đó lắc đáp lại ngay,
+  // ngón tay đặt trên tờ giấy mà vuốt thì giấy lắc theo ngón tay (tờ đang lắc dở thì lắng nhanh nhường lượt).
+  // Mỗi lúc chỉ một tờ rung. Rung tự động (chào, nhắc): tờ đang rung lắng hẳn rồi nghỉ thêm 2,5 giây thì tờ kia mới tự rung.
+  // Thao tác của người xem (cuộn, vuốt, chạm, rê chuột) luôn được đáp lại ngay: tờ khác đang lắc dở thì lắng nhanh nhường lượt.
   const docCards = [...document.querySelectorAll('.docs > .doc')];
   if (docCards.length && !reduce) {
-    const SWAY = { k: .12, c: .09 }, HELLO = { k: .12, c: .05, big: 1 }, HOVER = { k: .16, c: .09, big: 1 }, YIELD = { k: .16, c: .35 };
+    const coarse = matchMedia('(pointer: coarse)').matches;
+    const SWAY = { k: .12, c: coarse ? .06 : .09 }, HELLO = { k: .12, c: .05, big: 1 }, HOVER = { k: .16, c: .09, big: 1 }, TOUCH = { k: .14, c: .07, big: 1 }, YIELD = { k: .16, c: .35 }, EASE = { k: .14, c: .11 };
+    const G = coarse ? 2 : 1; // điện thoại: lắc theo cú vuốt rõ hơn (ngón tay vuốt ngắn hơn lăn chuột)
     const papers = docCards.map((card, i) => ({ card, el: card.querySelector('.doc__paper'), dir: i % 2 ? 1 : -1, a: 0, v: 0, e: 0, c: 2, m: SWAY, armed: true, want: false, hover: false, last: 0, peak: 0, t: 0 }));
     const MAX = 6, GAP = 2500;
-    let running = false, lastY = scrollY, lastDy = 0, lastT = 0, lastFast = 0, idle = 0, owner = null, freeAt = 0;
+    let running = false, lastY = scrollY, lastDy = 0, lastT = 0, lastFast = 0, idle = 0, owner = null, lastOwner = null, freeAt = 0, near = null;
     const flash = p => {
       p.card.classList.remove('is-loe'); void p.card.offsetWidth; p.card.classList.add('is-loe');
       clearTimeout(p.t); p.t = setTimeout(() => p.card.classList.remove('is-loe'), 2100);
     };
-    const free = p => owner === p || (!owner && performance.now() >= freeAt); // tờ này có được tự rung lúc này không
+    const free = p => owner === p || (!owner && (p === lastOwner || performance.now() >= freeAt)); // tờ này có được tự rung lúc này không (khoảng nghỉ chỉ chặn tờ kia)
     const push = (p, force, mode) => { owner = p; p.last = performance.now(); if (mode) p.m = mode; if (p.m.big) p.big = true; p.v += p.dir * force; wake(); };
+    const soft = p => Math.max(.15, 1 - Math.abs(p.a) / 5); // giấy càng nghiêng, lực thêm càng yếu: lắc mạnh mà không chạm góc tối đa
     const where = p => { const r = p.card.getBoundingClientRect(); return (r.top + r.height / 2) / innerHeight; }; // 0 = mép trên, 1 = mép dưới
     const tick = () => {
       // Tính theo thời gian thật (không theo số khung hình): màn 120Hz (iPhone, MacBook đời mới) rung đúng nhịp như màn 60Hz
@@ -203,26 +208,31 @@
       const y = scrollY, dy = Math.max(-90, Math.min(90, (y - lastY) / step)); // tốc độ cuộn quy về mỗi 1/60 giây
       lastY = y;
       if (Math.abs(dy) >= 3) lastFast = now;
-      // Lực cuộn chỉ tác động lên tờ gần giữa màn hình nhất
-      let near = null, nw = 0;
+      // Lực cuộn chỉ tác động lên tờ gần giữa màn hình nhất (đổi tờ khi tờ kia gần giữa hơn hẳn, để không giằng qua lại)
+      let best = null, bw = 0;
       for (const p of papers) {
         p.c = where(p);
         if (p.c < -.3 || p.c > 1.3) { p.armed = true; p.want = false; } // ra hẳn khỏi màn hình thì lần sau cuộn tới lại rung chào
-        const w = p.c > .1 && p.c < .9 ? 1 - Math.abs(p.c - .5) * 1.4 : 0;
-        if (w > nw && !p.hover) { near = p; nw = w; }
+        p.w = p.c > .05 && p.c < .95 ? 1 - Math.abs(p.c - .5) * 1.4 : 0;
+        if (p.w > bw && !p.hover) { best = p; bw = p.w; }
       }
-      const waiting = papers.some(p => p.want);
-      if (near && dy && (!waiting || near.want)) { // có tờ đang chờ rung chào thì tờ khác không lắc theo tay, để tờ đó sớm tới lượt
-        const f = nw * (dy * .004 * step + (dy - lastDy) * .04); // lắc theo tay nhẹ (~2–3°), để nhịp rung chào nổi bật
-        if (Math.abs(f) > .01 && free(near)) push(near, f, owner === near ? null : SWAY);
+      if (!near || !near.w || (best && best !== near && best.w > near.w + (near.e > 1 ? .35 : .12))) near = best; // tờ đang lắc rõ thì giữ lượt lâu hơn
+      const held = papers.some(p => p.touch);
+      if (near && near.w && dy && !held) { // ngón tay đang đặt trên tờ giấy thì tờ đó lắc theo ngón tay (xem touchmove), không cộng lực cuộn
+        const f = Math.max(-.7, Math.min(.7, G * near.w * (dy * .004 * step + (dy - lastDy) * .04))); // giới hạn mỗi nhịp: bắt đầu vuốt không giật mạnh
+        if (Math.abs(f) > .01) { // người xem đang cuộn: luôn đáp lại; tờ trước đó lắng êm (không cắt ngang) nhường tờ đang ở giữa
+          if (owner && owner !== near) owner.m = EASE;
+          push(near, f * soft(near), owner === near ? null : SWAY);
+        }
       }
       for (const p of papers) {
         if (p.armed && dy > 0 && p.c > .2 && p.c < .75) { p.armed = false; p.want = true; } // cuộn xuống tới vừa tầm mắt: xếp lượt rung chào
         if (p.want && (p.c < .08 || p.c > .92)) p.want = false; // chờ lâu quá, tờ đã ra khỏi màn hình thì thôi
-        if (p.want && free(p) && now - lastFast > 100) { p.want = false; p.v *= .3; p.a *= .5; push(p, 1.8, HELLO); flash(p); } // tay vừa dừng vuốt: rung chào (bớt đà lắc cũ để không chạm góc tối đa)
+        if (p.want && free(p) && !held && now - lastFast > 100) { p.want = false; p.v *= .3; p.a *= .5; push(p, 1.8, HELLO); flash(p); } // tay vừa dừng vuốt: rung chào (bớt đà lắc cũ để không chạm góc tối đa)
       }
       let moving = false;
       for (const p of papers) {
+        p.v = Math.max(-2, Math.min(2, p.v)); // nhiều lực dồn cùng lúc (chạm + cuộn + búng) cũng không lắc quá ~5°
         for (let r = step; r > 0; r -= 1) { const h = Math.min(1, r); p.v += (-p.m.k * p.a - p.m.c * p.v) * h; p.a = Math.max(-MAX, Math.min(MAX, p.a + p.v * h)); }
         p.e = Math.max(Math.abs(p.a), p.e * Math.pow(.965, step)); // bao độ lắc: giấy nhấc lên khi rung, hạ xuống dần khi lắng
         if (Math.abs(p.a) > .15 || Math.abs(p.v) > .05 || p.e > .25) moving = true; // dưới mức mắt thấy thì coi như đã lắng
@@ -231,9 +241,9 @@
         p.el.style.translate = '0 ' + (-p.e * 1.3).toFixed(1) + 'px';
         p.el.style.scale = (1 + p.e * .013).toFixed(3);
       }
-      if (owner && !moving) { // rung chào, nhắc, rê chuột: tờ kia nghỉ 2,5 giây; lắc theo tay thấy rõ: nghỉ 0,9 giây; lắc khẽ: không chờ
-        freeAt = now + (owner.peak > 1.2 ? (owner.big ? GAP : 900) : 0);
-        owner.peak = 0; owner.big = false; owner = null;
+      if (owner && !moving) { // sau rung chào, nhắc, chạm, rê chuột: rung tự động của tờ kia chờ 2,5 giây; sau lắc theo cuộn: 0,6 giây
+        freeAt = now + (owner.peak > 1.2 ? (owner.big ? GAP : 600) : 0);
+        owner.peak = 0; owner.big = false; lastOwner = owner; owner = null;
       }
       lastDy = dy;
       if (moving || dy) requestAnimationFrame(tick);
@@ -248,21 +258,56 @@
     // Đứng yên 4 giây mà có tờ giấy ở giữa màn hình thì nhắc nhẹ tờ lâu chưa rung nhất, rồi cứ 7 giây một lần
     const nudge = () => {
       const seen = papers.filter(p => p.c > .1 && p.c < .9 && !p.hover).sort((x, z) => x.last - z.last);
-      if (seen.length && free(seen[0])) { push(seen[0], 1.4, HELLO); flash(seen[0]); }
+      if (seen.length && free(seen[0]) && !papers.some(p => p.touch)) { push(seen[0], 1.4, HELLO); flash(seen[0]); }
       idle = setTimeout(nudge, seen.length ? 7000 : 4000);
     };
     const rest = () => { clearTimeout(idle); idle = setTimeout(nudge, 4000); };
     addEventListener('scroll', () => { wake(); rest(); }, { passive: true });
     papers.forEach(p => { p.c = where(p); });
     rest();
+    // Người xem chủ động (rê chuột, chạm) thì tờ đó đáp lại ngay; tờ khác đang lắc dở thì lắng nhanh nhường lượt
+    const takeOver = p => papers.forEach(q => { if (q !== p && (Math.abs(q.a) > .02 || Math.abs(q.v) > .02)) { q.m = YIELD; q.want = false; } });
     if (matchMedia('(hover: hover) and (pointer: fine)').matches) papers.forEach(p => {
-      // Rê chuột là người xem chủ động: tờ được rê lắc đáp lại ngay; tờ khác đang lắc dở thì lắng nhanh nhường lượt
-      p.card.addEventListener('pointerenter', () => {
-        p.hover = true; rest();
-        papers.forEach(q => { if (q !== p && (Math.abs(q.a) > .02 || Math.abs(q.v) > .02)) { q.m = YIELD; q.want = false; } });
-        p.peak = 0; push(p, 1.5, HOVER);
-      });
+      p.card.addEventListener('pointerenter', () => { p.hover = true; rest(); takeOver(p); p.peak = 0; push(p, 1.5, HOVER); });
       p.card.addEventListener('pointerleave', () => { p.hover = false; });
+    });
+    papers.forEach(p => {
+      // Chạm: lắc đáp lại ngay (chạm nhẹ rồi nhấc thì thêm nhịp sáng)
+      p.card.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        p.touch = { x: t.clientX, y: t.clientY, t: performance.now() };
+        rest(); takeOver(p); p.peak = 0;
+        p.touch.x0 = t.clientX; p.touch.y0 = t.clientY;
+        push(p, 1.4 * soft(p), TOUCH);
+      }, { passive: true });
+      // Vuốt với ngón tay đặt trên tờ giấy: giấy nghiêng nhẹ theo ngón tay, đổi hướng hay đổi tốc độ thì giật theo
+      p.card.addEventListener('touchmove', e => {
+        const t = e.touches[0], s0 = p.touch;
+        if (!s0) return;
+        const now = performance.now(), k = (1000 / 60) / Math.max(8, now - s0.t);
+        const vx = (t.clientX - s0.x) * k, vy = (t.clientY - s0.y) * k; // tốc độ ngón tay, quy về mỗi 1/60 giây
+        const ax = vx - (s0.vx || 0), ay = vy - (s0.vy || 0);
+        s0.x = t.clientX; s0.y = t.clientY; s0.t = now; s0.vx = vx; s0.vy = vy;
+        if (owner !== p) takeOver(p);
+        owner = p; p.m = TOUCH; p.big = true; p.last = now;
+        p.v += Math.max(-1.2, Math.min(1.2, vx * .02 - vy * .012 * p.dir + ax * .07 - ay * .05 * p.dir)) * soft(p);
+        wake();
+      }, { passive: true });
+      // Nhấc ngón tay: giấy bật rung theo lực vuốt, như búng tờ giấy (vuốt càng nhanh rung càng mạnh)
+      const up = () => {
+        const s0 = p.touch;
+        p.touch = null; rest();
+        if (s0 && Math.hypot(s0.x - s0.x0, s0.y - s0.y0) < 10) { flash(p); return; } // chạm nhẹ (không vuốt): thêm nhịp sáng
+        if (!s0 || performance.now() - s0.t > 120) return; // giữ yên rồi mới nhấc thì không búng
+        const speed = Math.hypot(s0.vx || 0, s0.vy || 0);
+        if (speed < 2) return;
+        if (owner && owner !== p) takeOver(p);
+        p.v = p.v * .4 - Math.sign(p.a || p.dir) * Math.min(2.2, .9 + speed * .05) * soft(p);
+        owner = p; p.m = TOUCH; p.big = true; p.last = performance.now();
+        wake();
+      };
+      p.card.addEventListener('touchend', up, { passive: true });
+      p.card.addEventListener('touchcancel', up, { passive: true });
     });
   }
 
