@@ -681,9 +681,11 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 
 
 .doc, .place { transition: border-color .35s ease, box-shadow .45s ease; }
-.doc { cursor: pointer; } /* cả thẻ bấm được để xem bản giấy */
+.doc, .place { cursor: pointer; } /* cả thẻ bấm được: giấy tờ mở bản giấy, địa chỉ mở chỉ đường */
 .doc__paper:active, .doc:active .doc__paper { transform: rotate(0) scale(.97); }
-.doc:active { border-color: rgba(216,180,107,.7); background-color: rgba(216,180,107,.05); }
+.doc:active, .place:active { border-color: rgba(216,180,107,.7); background-color: rgba(216,180,107,.05); }
+.place { transition: border-color .35s ease, box-shadow .45s ease, transform .2s ease; }
+.place:active { transform: scale(.985); }
 
 
 /* Chuột: chỉ áp dụng khi thiết bị có rê chuột thật */

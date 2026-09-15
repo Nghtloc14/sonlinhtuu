@@ -115,16 +115,21 @@
     if (open(viewer, btn)) viewer.scrollTop = 0;
   };
   document.querySelectorAll('[data-doc]').forEach(btn => btn.addEventListener('click', () => showDoc(btn)));
-  // Chạm, bấm vào bất kỳ chỗ nào trên thẻ giấy tờ (tên, số hiệu, nơi cấp, khoảng trống) cũng mở bản giấy — không phải nhắm đúng ảnh hay nút.
-  // Bàn phím vẫn dùng hai nút có sẵn. Vuốt qua thẻ để cuộn thì trình duyệt không phát "click" nên không mở nhầm.
+  // Cả thẻ bấm được: chạm, bấm vào bất kỳ chỗ nào trên thẻ (chữ, khoảng trống) cũng làm như bấm nút chính của thẻ —
+  // thẻ giấy tờ mở bản giấy, thẻ địa chỉ mở Google Maps chỉ đường. Không phải nhắm đúng ảnh hay dòng chữ nhỏ.
+  // Bàn phím vẫn dùng nút có sẵn. Vuốt qua thẻ để cuộn thì trình duyệt không phát "click"; bôi đen, nhấn giữ để sao chép chữ thì không mở.
+  const wholeCard = (card, act) => card.addEventListener('click', e => {
+    if (e.target.closest('button, a')) return; // nút, đường dẫn trong thẻ đã tự làm việc của nó
+    if (String(getSelection()).trim()) return;
+    act();
+  });
   document.querySelectorAll('.docs > .doc').forEach(card => {
     const btn = card.querySelector('[data-doc]');
-    if (!btn) return;
-    card.addEventListener('click', e => {
-      if (e.target.closest('button, a')) return; // nút trong thẻ đã tự mở
-      if (String(getSelection && getSelection()).trim()) return; // đang bôi đen chữ để sao chép số hiệu thì không mở
-      showDoc(btn);
-    });
+    if (btn) wholeCard(card, () => showDoc(btn));
+  });
+  document.querySelectorAll('.place').forEach(card => {
+    const link = card.querySelector('a[href]');
+    if (link) wholeCard(card, () => link.click());
   });
 
   // ---- Thanh trên cùng (máy tính): gạch chân mục đang xem
