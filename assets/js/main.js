@@ -229,10 +229,10 @@
     revealEls.forEach(el => rv.observe(el));
   }
 
-  // ---- Cuộn: thu gọn thanh trên, vạch tiến độ, núi trôi chậm (chiều sâu)
+  // ---- Cuộn: thu gọn thanh trên, vạch tiến độ, lớp núi sau trôi chậm (chiều sâu); lớp trước đứng yên để chân núi liền với phần kế tiếp
   const top = document.querySelector('.top');
   const hero = document.querySelector('.hero');
-  const layers = reduce ? [] : [[document.querySelector('.mtn--back'), .22], [document.querySelector('.mtn--mid'), .12]].filter(([el]) => el);
+  const layers = reduce ? [] : [[document.querySelector('.mtn--back'), .22]].filter(([el]) => el);
   let ticking = false;
   const onScroll = () => {
     ticking = false;
