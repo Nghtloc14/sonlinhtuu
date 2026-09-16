@@ -99,6 +99,10 @@
     'attp': {
       title: 'Chứng nhận đủ điều kiện an toàn thực phẩm · Số 07/GCN.ATTP',
       pages: [['assets/img/giay-attp.webp', 'Giấy chứng nhận cơ sở đủ điều kiện an toàn thực phẩm']]
+    },
+    'dkhkd': {
+      title: 'Giấy chứng nhận đăng ký hộ kinh doanh · Mã số 8836906514-001',
+      pages: [['assets/img/giay-dkhkd.webp', 'Giấy chứng nhận đăng ký hộ kinh doanh Nguyễn Chí Sơn, đã che thông tin cá nhân', 1100, 1637]]
     }
   };
   const viewer = document.getElementById('xem-giay');
@@ -107,8 +111,8 @@
     if (!doc || !viewer) return;
     viewer.querySelector('h2').textContent = doc.title;
     const box = viewer.querySelector('.viewer__pages');
-    box.replaceChildren(...doc.pages.map(([src, alt]) => {
-      const img = new Image(1100, 1557);
+    box.replaceChildren(...doc.pages.map(([src, alt, w = 1100, h = 1557]) => {
+      const img = new Image(w, h);
       img.src = src; img.alt = alt; img.decoding = 'async';
       return img;
     }));
@@ -400,7 +404,7 @@
   }
 
   // ---- Hiện dần khi cuộn tới; nhóm (4 bước, 3 ảnh, 2 giấy) hiện lần lượt
-  const groups = ['.head', '.diem-list > .diem', '.about__lead', '.place', '.step__head', '.gallery > figure', '.docs > .doc', '.docs__note', '.contact__lead', '.contact__actions', '.foot__in > div'];
+  const groups = ['.head', '.diem-list > .diem', '.about__lead', '.place', '.step__head', '.gallery > figure', '.ruou__lead', '.ruou > figure', '.docs > .doc', '.docs__note', '.contact__lead', '.contact__actions', '.foot__in > div'];
   const revealEls = [];
   groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i) => {
     el.classList.add('rv');
