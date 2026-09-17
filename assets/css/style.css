@@ -603,6 +603,21 @@ p { text-wrap: pretty; }
   .hero__cta .btn { min-height: 62px; padding: 0 30px; font-size: 21px; }
 }
 
+/* Máy tính màn đứng hoặc gần vuông (màn xoay dọc, màn lớn): đầu trang xếp dọc như điện thoại.
+   Khung vòm lớn theo màn (không cao quá phần màn còn lại), chữ và nút lớn theo khung vòm; không nhỏ hơn cỡ đang dùng ở màn thường */
+@media (min-width: 1024px) and (max-aspect-ratio: 1249/1000) {
+  .hero { --vom: min(80vw, 1400px, calc((100vh - var(--top-h) - 250px) / 1.52)); }
+  .arch { width: max(min(56vw, 500px, calc((100vh - 440px) * .886 + 12px)), var(--vom)); }
+  .seal { font-size: max(12px, calc(var(--vom) * .024)); }
+  .seal::before, .seal::after { width: max(34px, calc(var(--vom) * .068)); }
+  .title { margin-top: calc(-1 * max(84px, calc(var(--vom) * .168))); }
+  .title__l1 { font-size: max(76px, calc(var(--vom) * .152)); }
+  .title__l2 { font-size: max(40px, calc(var(--vom) * .08)); }
+  .hero__lead { font-size: max(17px, calc(var(--vom) * .034)); margin-top: max(16px, calc(var(--vom) * .032)); }
+  .hero__cta { gap: max(14px, calc(var(--vom) * .028)); margin-top: max(18px, min(3.6vh, 30px), calc(var(--vom) * .05)); }
+  .hero__cta .btn { min-height: max(52px, calc(var(--vom) * .104)); padding: 0 max(22px, calc(var(--vom) * .044)); font-size: max(18px, calc(var(--vom) * .036)); }
+}
+
 /* Điện thoại, máy tính bảng nằm ngang (chưa tới bố cục máy tính): khung vòm theo chiều cao màn */
 @media (min-width: 600px) and (max-width: 1023px) and (min-aspect-ratio: 5/4) {
   /* Tiêu đề phần một dòng, cỡ theo chiều cao để không chiếm hết màn ngang thấp */
@@ -642,7 +657,7 @@ p { text-wrap: pretty; }
 
 /* Máy tính dưới 1440px: chừa lề 116px mỗi bên cho cụm nút nổi (52px + cách góc 40px + cách nội dung 24px) */
 @media (min-width: 1024px) and (max-width: 1439px) {
-  .wrap, .hero__in { width: min(100% - 232px, 1180px); }
+  .wrap, .hero__in { width: min(100% - 232px, 1180px); margin-inline: auto; }
   .doc { grid-template-columns: 96px 1fr; gap: 20px; padding: 22px; }
 }
 
@@ -697,12 +712,12 @@ p { text-wrap: pretty; }
 
 /* Màn rất rộng (27 inch, cửa sổ toàn màn hình): nới khung, phóng chữ và ảnh cho cân */
 @media (min-width: 1760px) {
-  .wrap, .hero__in { width: min(100% - 160px, 1400px); }
+  .wrap, .hero__in { width: min(100% - 160px, 1400px); margin-inline: auto; }
   .ruou { max-width: min(1240px, calc((100vh - var(--top-h) - 110px) * 2.3)); }
   .h2 { font-size: 78px; }
 }
 @media (min-width: 2200px) {
-  .wrap, .hero__in { width: min(100% - 240px, 1600px); }
+  .wrap, .hero__in { width: min(100% - 240px, 1600px); margin-inline: auto; }
 }
 
 /* Điện thoại màn thấp (iPhone SE đời đầu): bỏ biểu tượng trên đầu (tên đã có), chữ đè ảnh ít hơn để ảnh không bị che */
