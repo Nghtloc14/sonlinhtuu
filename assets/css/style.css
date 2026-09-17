@@ -258,6 +258,7 @@ p { text-wrap: pretty; }
 .ruou__lead { margin: 0 auto 28px; max-width: 34em; text-align: center; font-size: 16.5px; color: var(--chu); text-wrap: balance; }
 .ruou__lead strong { color: var(--kem); font-weight: 600; }
 .ruou { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 16px; max-width: 520px; margin: 0 auto; }
+.ruou > .ruou__doc:first-child { grid-column: 1 / -1; justify-self: center; width: min(100%, 300px); } /* dòng rượu sâm: chum ngâm sâm lớn trước */
 .ruou figure { margin: 0; }
 .ruou__vom {
   position: relative; overflow: hidden; aspect-ratio: 3 / 4; background: #0a1a12;
@@ -435,8 +436,9 @@ p { text-wrap: pretty; }
   .docs > .doc:last-child:nth-child(odd) { grid-column: auto; justify-self: stretch; width: auto; }
 }
 @media (min-width: 640px) {
-  .ruou { max-width: 760px; gap: 30px 22px; }
-  .ruou__ngang { grid-column: auto; }
+  .ruou { max-width: 760px; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 30px 22px; }
+  .ruou > .ruou__doc, .ruou > .ruou__doc:first-child { grid-column: span 2; justify-self: stretch; width: auto; }
+  .ruou__ngang { grid-column: span 3; }
 }
 
 /* ===================== Máy tính ≥ 1024px ===================== */
@@ -523,15 +525,7 @@ p { text-wrap: pretty; }
   .docs { max-width: 1040px; gap: 28px; }
   .docs > .doc:last-child:nth-child(odd) { width: calc(50% - 14px); }
   .ruou__lead { margin-bottom: clamp(28px, 5vh, 44px); font-size: 18px; }
-  .ruou { max-width: 1060px; grid-template-columns: 1fr 1fr 1.35fr; grid-template-rows: 1fr 1fr; gap: 20px 26px; height: clamp(400px, calc(100vh - var(--top-h) - 260px), 600px); }
-  .ruou figure { display: flex; flex-direction: column; min-height: 0; }
-  .ruou__doc { grid-row: 1 / span 2; }
-  .ruou__doc .ruou__vom { flex: 1; aspect-ratio: auto; min-height: 0; }
-  .ruou__ngang { grid-column: 3; position: relative; }
-  .ruou__ngang .frame { flex: 1; display: flex; min-height: 0; }
-  .ruou__ngang .frame__in { flex: 1; aspect-ratio: auto; min-height: 0; }
-  .ruou__ngang .frame__in::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, transparent 58%, rgba(6,16,11,.82)); }
-  .ruou__ngang figcaption { position: absolute; z-index: 2; left: 22px; right: 16px; bottom: 18px; margin: 0; text-align: left; color: var(--kem); text-shadow: 0 1px 8px rgba(0,0,0,.7); }
+  .ruou { max-width: min(1060px, calc((100vh - var(--top-h) - 110px) * 2.3)); gap: 34px 26px; }
   .doc { grid-template-columns: 112px 1fr; gap: 26px; padding: 26px 26px 22px; }
   .doc h3 { font-size: 17px; }
 
@@ -638,8 +632,9 @@ p { text-wrap: pretty; }
   .step__head { grid-area: head; align-self: end; }
   .step__desc { grid-area: desc; align-self: start; }
   .step + .step { margin-top: 40px; }
-  .ruou { max-width: 900px; grid-template-columns: 1fr 1fr 1.5fr 1.5fr; gap: 16px; }
-  .ruou__ngang { grid-column: auto; }
+  .ruou { max-width: 940px; grid-template-columns: 1fr 1fr 1fr 1.5fr 1.5fr; gap: 14px; }
+  .ruou > .ruou__doc, .ruou > .ruou__doc:first-child, .ruou__ngang { grid-column: auto; }
+  .ruou figcaption { margin-top: 8px; font-size: 12.5px; line-height: 1.35; }
   .ruou__vom { height: calc(100vh - 170px); height: calc(100svh - 170px); aspect-ratio: auto; }
   .ruou__ngang .frame__in { height: calc(100vh - 180px); height: calc(100svh - 180px); aspect-ratio: auto; }
   .ruou__lead { margin-bottom: 18px; }
@@ -703,7 +698,7 @@ p { text-wrap: pretty; }
 /* Màn rất rộng (27 inch, cửa sổ toàn màn hình): nới khung, phóng chữ và ảnh cho cân */
 @media (min-width: 1760px) {
   .wrap, .hero__in { width: min(100% - 160px, 1400px); }
-  .ruou { max-width: 1280px; height: clamp(400px, calc(100vh - var(--top-h) - 280px), 700px); }
+  .ruou { max-width: min(1240px, calc((100vh - var(--top-h) - 110px) * 2.3)); }
   .h2 { font-size: 78px; }
 }
 @media (min-width: 2200px) {

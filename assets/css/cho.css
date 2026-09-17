@@ -1,5 +1,5 @@
 /* Bản A — màn chờ khi khách quét mã QR trên chai.
-   Mẫu Vòm sâm: ảnh chum ngâm sâm hiện dần trong khung vòm, hơi rượu bốc nhẹ, hạt vàng bay lên.
+   Mẫu khung vòm: ảnh kho chum sành (trước 17/09 là chum ngâm sâm) hiện dần trong khung vòm, hơi rượu bốc nhẹ, hạt vàng bay lên.
    Chỉ hiện ở /qr, mỗi phiên một lần, khoảng 2,2 giây, tối đa 3 giây, chạm để bỏ qua. */
 
 .chao { display: none; }
