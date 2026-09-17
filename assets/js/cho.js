@@ -1,5 +1,5 @@
 // Bản A — màn chờ khi quét mã QR. Chạy ngay khi đọc tới (không defer) để trang không lộ ra trước màn chờ.
-// Mẫu khung vòm (ảnh kho chum sành — trước 17/09 là chum ngâm sâm). Tối thiểu 2,15 giây, chờ font + ảnh, tối đa 3 giây, chạm để bỏ qua. ?loader= để xem lại khi thử.
+// Mẫu khung vòm (ảnh lửa bếp củi dưới nồi chưng — trước 17/09 là chum ngâm sâm). Tối thiểu 2,15 giây, chờ font + ảnh, tối đa 3 giây, chạm để bỏ qua. ?loader= để xem lại khi thử.
 (() => {
   const root = document.documentElement;
   const box = document.querySelector('[data-chao]');
@@ -16,10 +16,10 @@
   const hat = list => list.map(([x, d, dx]) => `<span class="k-hat" style="--x:${x};--d:${d};--dx:${dx}"></span>`).join('');
 
   const MAU = {
-    6: { min: 2150, anh: ['mat-tien-kho-chum.webp'], html: `
+    6: { min: 2150, anh: ['mat-tien-bep-cui.webp'], html: `
       <div class="chao__in">
         <div class="k-wrap">
-          <figure class="k-vom" style="margin:0"><div class="k-khung k6__khung"><img src="${IMG}mat-tien-kho-chum.webp" width="840" height="1034" alt=""></div></figure>
+          <figure class="k-vom" style="margin:0"><div class="k-khung k6__khung"><img src="${IMG}mat-tien-bep-cui.webp" width="840" height="1034" alt=""></div></figure>
           ${hoi}
           ${hat([['18%', '.1s', '-8px'], ['32%', '.9s', '6px'], ['50%', '.4s', '-4px'], ['66%', '1.3s', '10px'], ['80%', '.6s', '-6px'], ['42%', '1.7s', '4px']])}
         </div>
